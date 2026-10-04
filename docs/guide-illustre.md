@@ -124,4 +124,4 @@ Le contexte du documentaliste public contient uniquement les éléments publics.
 
 ## Plusieurs portes, le même Alfred
 
-Hermes Desktop utilise par défaut un backend Remote gateway supervisé, transporté par SSH. WhatsApp et Teams passent par la gateway de messagerie ; les IDE peuvent joindre la CLI ou un backend ACP compatible via SSH. [Le guide de communication](communiquer-avec-alfred.md) explique les réglages, les sessions et l’état réellement testé.
+Hermes Desktop vise un backend Remote gateway supervisé, accessible en HTTPS authentifié. L’accès Desktop actuellement vérifié passe par un tunnel SSH manuel ; Connect via SSH est une alternative privée à éprouver. WhatsApp et Teams passent par la gateway de messagerie ; les IDE peuvent joindre la CLI ou un backend ACP compatible via SSH. [Le guide de communication](communiquer-avec-alfred.md) explique les réglages, les sessions et l’état réellement testé.

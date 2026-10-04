@@ -4,8 +4,10 @@ Plusieurs portes donnent accès au même profil d’interface, Alfred. Son rôle
 
 ```mermaid
 flowchart LR
-    D[Hermes Desktop<br/>Remote gateway] --> S[Tunnel SSH chiffré]
-    S --> B[Backend headless local<br/>systemd]
+    D[Hermes Desktop<br/>Remote gateway] -.-> H[HTTPS authentifié<br/>cible recommandée]
+    H -.-> B[Backend headless local<br/>systemd]
+    P[Hermes Desktop<br/>accès provisoire vérifié] --> S[Tunnel SSH manuel]
+    S --> B
     I[IDE<br/>terminal ou client ACP compatible] --> T[SSH vers CLI ou ACP]
     W[WhatsApp] --> G[Gateway de messagerie]
     M[Teams] --> G
@@ -16,15 +18,23 @@ flowchart LR
     O --> A
 ```
 
+Les flèches pointillées représentent la cible HTTPS, encore à déployer et à éprouver. Le transport Desktop actuellement vérifié est le tunnel SSH manuel.
+
 Le profil et ses préférences sont communs ; les conversations de chaque canal peuvent avoir leurs propres sessions. Cette architecture ne promet pas une fusion automatique de tous les historiques. Les missions durables doivent porter le contexte utile à leur reprise.
 
-## Hermes Desktop : choix par défaut
+## Hermes Desktop : accès recommandé et état actuel
 
-Le harness retient **Remote gateway vers un backend géré par systemd, transporté par SSH**. Le processus `hermes serve` est lancé au démarrage de la VM et surveillé par le socle. Il reste disponible lorsque Desktop se ferme. Le mode `serve` est headless : aucune compilation de l’interface web ni serveur graphique n’est nécessaire sur la VM.
+Pour une instance utilisée au quotidien, le harness recommande **Remote gateway en HTTPS direct vers un backend supervisé**. Desktop se connecte à une URL stable ; l'utilisateur n'a aucun tunnel à ouvrir sur son PC. Le backend reste lancé et surveillé par systemd. Le reverse proxy TLS rejoint ce backend sur la boucle locale de la VM : « HTTPS direct » décrit l'accès du PC, pas une exposition sans protection du processus Hermes.
 
-Le mode natif **Connect via SSH** fonctionne autrement : Desktop ouvre le transport, détecte Hermes, peut lancer son backend et adopte un token de session. Il convient à un accès ponctuel. Pour une plateforme dont les services et les reprises sont gérés de manière durable, le backend supervisé offre un cycle de vie plus explicite. Le choix du mode Remote gateway ne signifie pas exposer le port sur Internet : SSH reste le transport par défaut.
+Ce mode exige un domaine, un certificat avec renouvellement automatique, l'authentification native Hermes et une validation HTTP et WebSocket de bout en bout. Le bootstrap actuel **ne déploie pas encore cette publication HTTPS**. Le backend à token de boucle locale décrit ci-dessous doit rester privé ; son token Desktop ne constitue pas à lui seul une configuration d'authentification publique. Le partage d'un reverse proxy avec Teams est possible, avec des noms d'hôte et routes distincts ; les méthodes d'authentification de Desktop et de Teams restent propres à chaque canal.
 
-Ces comportements sont décrits dans les [sources officielles du Desktop verrouillé](https://github.com/NousResearch/hermes-agent/blob/f97608f178d1ffeca59860195ab7da295f7c8e5f/website/docs/user-guide/multi-connection-desktop.md) et le [parseur officiel de serve](https://github.com/NousResearch/hermes-agent/blob/f97608f178d1ffeca59860195ab7da295f7c8e5f/hermes_cli/subcommands/dashboard.py).
+**Connect via SSH** est l'alternative pour une instance accessible par SSH, sans publication HTTPS. Desktop gère lui-même le transport, les probes et le token du backend. Ce mode ne limite pas l'autonomie de la gateway de messagerie ou des autres services déjà supervisés. Le service permanent n'est donc pas, à lui seul, une raison de préférer un tunnel manuel.
+
+L'adaptation SSH native au harness reste à éprouver : le compte de connexion doit accéder au bon exécutable et au profil Alfred, sans créer un second environnement Hermes. Le compte de service sans shell et le wrapper d'accès du socle ne garantissent pas cette compatibilité automatiquement. Ne pas présenter un simple login administrateur comme une intégration Desktop validée.
+
+**Remote gateway via tunnel SSH manuel** reste un accès provisoire vérifié et une méthode de diagnostic. Il ajoute la gestion d'un processus côté PC ; ce n'est plus l'expérience recommandée par défaut. Les procédures suivantes documentent exactement cet accès disponible aujourd'hui.
+
+Les modes Remote gateway et SSH sont décrits dans les [sources officielles du Desktop verrouillé](https://github.com/NousResearch/hermes-agent/blob/f97608f178d1ffeca59860195ab7da295f7c8e5f/website/docs/user-guide/multi-connection-desktop.md). Le [serveur officiel](https://github.com/NousResearch/hermes-agent/blob/f97608f178d1ffeca59860195ab7da295f7c8e5f/hermes_cli/web_server.py) définit la porte d'authentification à configurer pour HTTPS.
 
 ### Sur la VM
 
@@ -69,7 +79,7 @@ ssh -N -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 \
   -o ServerAliveCountMax=3 -L 127.0.0.1:9119:127.0.0.1:9119 USER@HOST
 ```
 
-Le port 9119 n’a besoin d’aucune redirection NAT. Depuis l’extérieur, utiliser un chemin SSH accessible et vérifié. Une publication HTTPS directe avec OAuth ou mot de passe est une variante qui nécessite son propre déploiement, sa revue et ses tests ; elle n’est pas activée par ce bootstrap.
+Le port 9119 n’a besoin d’aucune redirection NAT. Depuis l’extérieur, utiliser un chemin SSH accessible et vérifié. La publication HTTPS recommandée exige encore son déploiement, son authentification et ses tests ; elle n’est pas activée par ce bootstrap.
 
 ## WhatsApp et Teams
 

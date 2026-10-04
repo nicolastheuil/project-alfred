@@ -27,4 +27,4 @@ L’[étude de huit outils](etude-outils-v1.md) décrit les décisions, les mesu
 
 ## Accès Desktop
 
-Le backend headless supervisé et le transport SSH sont installables depuis ce socle. [Le guide des portes d’entrée](communiquer-avec-alfred.md) distingue le transport vérifié des essais utilisateur encore nécessaires, et documente les limites des raccordements IDE.
+Le backend headless supervisé et le transport SSH manuel sont installables depuis ce socle. La cible d’usage quotidien est Remote gateway en HTTPS authentifié ; cette publication avec renouvellement TLS automatique reste à construire. Le mode SSH natif de Desktop reste à adapter au compte de service du harness. [Le guide des portes d’entrée](communiquer-avec-alfred.md) distingue le transport vérifié des essais utilisateur encore nécessaires, et documente les limites des raccordements IDE.
