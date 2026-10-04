@@ -1,0 +1,33 @@
+[Unit]
+Description=Alfred headless backend for Hermes Desktop
+After=network-online.target alfred-gateway.service
+Wants=network-online.target
+StartLimitIntervalSec=900
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=alfred
+Group=alfred
+WorkingDirectory=/var/lib/alfred-agent
+Environment=HOME=/var/lib/alfred-agent
+Environment=PATH=/opt/alfred/tools/node/bin:/usr/local/bin:/usr/bin:/bin
+Environment=HERMES_HOME=/var/lib/alfred-agent/.hermes
+EnvironmentFile=/etc/alfred/desktop.env
+ExecStart=/usr/local/bin/hermes -p alfred serve --isolated --host 127.0.0.1 --port 9119
+Restart=always
+RestartSec=15
+TimeoutStopSec=45
+KillMode=control-group
+UMask=0077
+Slice=alfred-runtime.slice
+MemoryMax=384M
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+# Native startup and WebSocket logs can include an authentication URL.
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy=multi-user.target

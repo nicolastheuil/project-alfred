@@ -51,3 +51,7 @@ Le diagnostic initial peut signaler les credentials et canaux encore absents. Il
 ## Modules experts
 
 Après composition des profils, suivre le [déploiement des modules retenus](deploiement-modules.md). Les [résultats de l’étude](etude-outils-v1.md) distinguent les fonctions réellement installées et les validations encore nécessaires.
+
+## Raccorder Hermes Desktop
+
+Après composition des profils et supervision, le [guide des accès](communiquer-avec-alfred.md) fournit le backend headless supervisé, le transport SSH et les procédures Desktop, messageries et IDE. Le choix par défaut est Remote gateway sur boucle locale via SSH.

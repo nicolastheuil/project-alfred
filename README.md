@@ -8,6 +8,7 @@ Alfred est le point d'entrée d'une équipe d'agents spécialisés. Il comprend 
 
 ## Découvrir le fonctionnement
 
+- [Communiquer avec Alfred : Desktop, WhatsApp, Teams et IDE via SSH](docs/communiquer-avec-alfred.md)
 - [Le bureau d'études d'Alfred : guide illustré](docs/guide-illustre.md)
 - [Socle public, instance privée : personnaliser sans tout recopier](docs/personnalisation.md)
 - [Qui publie vers quels dépôts ?](docs/publication.md)

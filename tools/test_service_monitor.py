@@ -12,6 +12,30 @@ spec.loader.exec_module(monitor)
 
 
 class RecoveryChecks(unittest.TestCase):
+    def test_extensions_survive_base_inventory_replacement(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            base = root / 'base.json'
+            ext = root / 'extensions'
+            ext.mkdir()
+            base.write_text('{"services":[{"unit":"base.service"}]}')
+            (ext / 'custom.json').write_text('{"services":[{"unit":"custom.timer"}]}')
+            with patch.object(monitor, 'INVENTORY', base), patch.object(monitor, 'EXTENSIONS', ext):
+                self.assertEqual(len(monitor.load_inventory()['services']), 2)
+                base.write_text('{"services":[]}')
+                self.assertEqual(monitor.load_inventory()['services'][0]['unit'], 'custom.timer')
+
+    def test_duplicate_extension_cannot_override_base_service(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            base = root / 'base.json'
+            base.write_text('{"services":[{"unit":"base.service"}]}')
+            ext = root / 'extensions'
+            ext.mkdir()
+            (ext / 'duplicate.json').write_text('{"services":[{"unit":"base.service"}]}')
+            with patch.object(monitor, 'INVENTORY', base), patch.object(monitor, 'EXTENSIONS', ext):
+                with self.assertRaises(ValueError):
+                    monitor.load_inventory()
     def test_monitor_report_timestamp_field_and_stale_detection(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'health.json'

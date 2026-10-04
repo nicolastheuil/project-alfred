@@ -24,3 +24,7 @@ Le guide illustré décrit cette cible. Chaque fonctionnalité sera marquée com
 ## Modules étudiés et mis en service
 
 L’[étude de huit outils](etude-outils-v1.md) décrit les décisions, les mesures et les limites. Les méthodes ECC, Context7 distant et LintLang sont intégrés sans daemon supplémentaire ; RTK dispose d’un bootstrap de compilation compatible Debian 12. La sélection d’outils native a été corrigée et sa découverte testée. Ces acceptations ne certifient pas le circuit complet de missions.
+
+## Accès Desktop
+
+Le backend headless supervisé et le transport SSH sont installables depuis ce socle. [Le guide des portes d’entrée](communiquer-avec-alfred.md) distingue le transport vérifié des essais utilisateur encore nécessaires, et documente les limites des raccordements IDE.

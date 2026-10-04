@@ -48,3 +48,7 @@ Les modules adoptés sont verrouillés dans [modules.lock.json](config/modules.l
 Headroom, Tool Slimmer, Local Knowledge et Sibyl sont crédités comme sources étudiées dans [l'étude](docs/etude-outils-v1.md) et le verrou, avec leurs révisions et licences. Ils ne sont pas des composants déployés.
 
 Tout composant ajouté doit avoir une origine, une version identifiable, une explication de sa fonction et une raison du choix. Son état passe à « installé » ou « validé » seulement après vérification réelle. Les outils simplement envisagés restent dans l'[étude de l'écosystème](docs/ecosysteme.md), avec leurs sources et les critères à vérifier avant adoption.
+
+## Backend Desktop et transport SSH
+
+Le backend `hermes serve` et le protocole Desktop sont fournis par [Hermes Agent](https://github.com/NousResearch/hermes-agent), à la même version et licence verrouillées que le moteur. La version de validation est `0.21.5`, commit `f97608f178d1ffeca59860195ab7da295f7c8e5f`. Le transport utilise [OpenSSH](https://www.openssh.com/), sous licences BSD indiquées par ses [sources officielles](https://github.com/openssh/openssh-portable). Ils permettent un accès authentifié chiffré, sans port Desktop public. Le service et ses probes sont gérés par systemd, déjà crédité dans le socle. Les handshakes HTTP/WS et le transport Windows sont vérifiés ; les clients graphiques et leurs conversations gardent leur propre acceptation.

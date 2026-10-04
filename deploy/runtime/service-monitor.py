@@ -16,6 +16,7 @@ from urllib.request import urlopen
 HOME = Path('/var/lib/alfred-agent/.hermes')
 STATE = Path('/var/lib/alfred/monitor')
 INVENTORY = Path('/etc/alfred/service-inventory.json')
+EXTENSIONS = Path('/etc/alfred/service-inventory.d')
 INCIDENTS = HOME / 'shared/missions/platform-incidents'
 
 
@@ -56,6 +57,20 @@ def load(path, default):
         return json.loads(path.read_text(encoding='utf-8'))
     except FileNotFoundError:
         return default
+
+
+def load_inventory():
+    inventory = load(INVENTORY, {})
+    services = list(inventory.get('services', []))
+    units = {item['unit'] for item in services}
+    for path in sorted(EXTENSIONS.glob('*.json')):
+        for item in load(path, {}).get('services', []):
+            if item['unit'] in units:
+                raise ValueError('Duplicate extension unit')
+            units.add(item['unit'])
+            services.append(item)
+    inventory['services'] = services
+    return inventory
 
 
 def properties(unit):
@@ -218,7 +233,7 @@ def main():
     parser.add_argument('--status', action='store_true')
     args = parser.parse_args()
     if args.status:
-        inventory = load(INVENTORY, {})
+        inventory = load_inventory()
         for service in inventory['services']:
             ok, reason, prop = health(service)
             print(json.dumps({'at': datetime.now(timezone.utc).isoformat(), 'unit': service['unit'],
@@ -228,7 +243,7 @@ def main():
     if os.geteuid() != 0:
         raise SystemExit('Root required; agents must use the restricted service-control wrapper')
     STATE.mkdir(parents=True, exist_ok=True, mode=0o700)
-    inventory = load(INVENTORY, {})
+    inventory = load_inventory()
     units = {item['unit'] for item in inventory['services']}
     if any(not re.fullmatch(r'[a-zA-Z0-9_.@-]+\.(service|timer)', unit) for unit in units):
         raise SystemExit('Invalid unit inventory')

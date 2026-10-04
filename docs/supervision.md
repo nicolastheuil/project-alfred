@@ -32,3 +32,7 @@ Contrôles utiles : `systemctl status alfred-gateway.service alfred-monitor.time
 L'agent ne garantit pas une correction automatique de toute panne : il diagnostique, répare dans les droits disponibles, vérifie, puis escalade le besoin précis si nécessaire. Les essais de panne et leurs résultats appartiennent au journal d'acceptation de chaque instance.
 
 Le job déterministe de contrôle possède aussi Restart=on-failure et une limite de tentatives. La sonde du timer vérifie la fraîcheur de health.json : un timer actif avec des contrôles qui ne produisent plus de rapport n’est pas considéré comme sain.
+
+## Ajouter un service de socle ou d’instance
+
+Des fragments root-owned `/etc/alfred/service-inventory.d/*.json`, de forme `{"services": [...]}`, complètent l’inventaire principal. Une unité ne peut pas être déclarée deux fois : un fragment ne remplace jamais silencieusement une sonde du socle. Les extensions restent présentes lorsqu’un bootstrap régénère l’inventaire principal. Un service temporaire normalement inactif doit être suivi par son contrôleur de cycle de vie ; inscrire son contrôle permanent, plutôt que relancer aveuglément le travail temporaire. Le backend Desktop fournit son propre fragment et sa sonde HTTP.

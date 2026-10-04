@@ -121,3 +121,7 @@ La machine à états ci-dessus est un schéma logique de la cible. Ses libellés
 Le logiciel repère un changement de configuration, rôle ou skill, conserve son diff et prépare les validations. Le documentaliste explique ce qui change. Les contrôles comparent le texte aux paramètres vérifiables. Les commits et les erreurs de publication sont suivis explicitement.
 
 Le contexte du documentaliste public contient uniquement les éléments publics. La personnalisation et la documentation d'une instance privée suivent un circuit distinct. Une tâche métier ordinaire n'est pas un changement du produit.
+
+## Plusieurs portes, le même Alfred
+
+Hermes Desktop utilise par défaut un backend Remote gateway supervisé, transporté par SSH. WhatsApp et Teams passent par la gateway de messagerie ; les IDE peuvent joindre la CLI ou un backend ACP compatible via SSH. [Le guide de communication](communiquer-avec-alfred.md) explique les réglages, les sessions et l’état réellement testé.
