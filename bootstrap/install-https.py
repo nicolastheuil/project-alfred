@@ -158,7 +158,7 @@ def main():
         "probes": [{"kind": "http_json", "url": "http://127.0.0.1:9119/api/auth/providers", "field": "providers", "expected": [expected_provider]}]}]}, indent=2) + "\n")
     (inventory / "https.json").write_text(json.dumps({"services": [{"unit": "nginx.service", "grace_seconds": 90, "probes": [{"kind": "tls", "host": "127.0.0.1", "port": args.listen_port, "server_name": args.hostname, "min_validity_seconds": 1209600}]}]}, indent=2) + "\n")
     import shutil
-    for name in ('acme-manual.py', 'acme-deploy.py'):
+    for name in ('acme-manual.py', 'acme-deploy.py', 'desktop-password.py'):
         shutil.copyfile(source / 'deploy/runtime' / name, '/usr/local/lib/alfred/' + name)
     tls_hosts = [args.hostname] + ([args.teams_hostname] if args.teams_hostname else [])
     tls_targets = [str(certificate.parent)] + ([str(Path(args.teams_certificate).parent)] if args.teams_hostname else [])

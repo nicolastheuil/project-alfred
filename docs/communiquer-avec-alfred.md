@@ -44,6 +44,8 @@ Après avoir renseigné l’URL, choisir **Sign in** et terminer la connexion da
 
 Cliquer **Save connection**, puis **Test** sur la connexion enregistrée. Le test doit valider HTTP et WebSocket. Ensuite, sélectionner cette gateway dans **Sessions**, choisir le profil **Alfred** et envoyer une première demande pour vérifier une réponse complète. Définir la connexion comme **Primary** si elle doit devenir l’instance par défaut ; la connexion locale **This device**, gérée par Desktop, peut rester présente. Le backend du socle utilise Alfred comme contexte par défaut. Dans Desktop, un profil choisi explicitement prend toutefois priorité : sélectionner un expert ouvre une conversation directe avec lui. Pour l’usage d’assistant, conserver **Alfred** sélectionné et lui confier la demande ; la liste des experts n’est pas un routage automatique vers Alfred.
 
+Le [guide de récupération du login local](desktop-recovery.md) couvre le mot de passe oublié, sa réinitialisation via SSH administrateur et l’invalidation des anciennes sessions.
+
 ### Comprendre le formulaire
 
 Le bouton **Session token** visible dans le formulaire correspond à un autre mode d’authentification. Pour la gateway HTTPS avec authentification native retenue ici, sélectionner **Sign in** et utiliser le fournisseur configuré côté serveur. Le token technique de l’ancien backend local n’est pas l’identifiant de cette nouvelle connexion.

@@ -28,7 +28,9 @@ jobs:
           bash -n deploy/runtime/repair-client.sh
           bash -n deploy/runtime/service-status.sh
       - name: Check supervision failure paths
-        run: python tools/test_service_monitor.py
+        run: |
+          python tools/test_service_monitor.py
+          python tools/test_desktop_password.py
       - name: Install pinned instruction linter
         run: |
           python -m pip install --require-hashes --only-binary=:all: -r deploy/runtime/lintlang-requirements.lock
