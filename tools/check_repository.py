@@ -41,6 +41,17 @@ def check():
             except (ValueError, UnicodeError) as error:
                 errors.append(f"Invalid JSON {relative}: {error}")
     contract = json.loads((ROOT / "config/platform-contract.json").read_text(encoding="utf-8"))
+    team = json.loads((ROOT / "config/team-seed.json").read_text(encoding="utf-8"))
+    names = [p["id"] for p in team["profiles"]]
+    if len(names) != len(set(names)) or team["entrypoint"] not in names:
+        errors.append("Profile seed must have unique ids and an existing entrypoint")
+    for profile in team["profiles"]:
+        source = (ROOT / profile["soul"]).resolve()
+        if not re.fullmatch(r"[a-z][a-z0-9-]{0,39}", profile["id"]) or not source.is_relative_to(ROOT) or not source.is_file():
+            errors.append("Invalid native profile seed")
+        if len(profile["memory"]) > 2200:
+            errors.append("Profile memory seed exceeds the default budget")
+    compile((ROOT / "bootstrap/seed-profiles.py").read_text(encoding="utf-8"), "seed-profiles.py", "exec")
     for role, relative in contract["roles"].items():
         path = (ROOT / relative).resolve()
         if not path.is_relative_to(ROOT) or not path.is_file():

@@ -4,9 +4,15 @@ Chaque installation choisit ses destinations GitHub dans sa configuration privé
 
 ```mermaid
 flowchart TB
-    C[Changement de configuration, rôle, skill ou code] --> S{Périmètre du changement}
+    A[Demande via Alfred ou un IDE] --> C[Changement de configuration, rôle, skill ou code]
+    C --> S{Périmètre du changement}
     S -->|Générique| P[Sources du socle]
     S -->|Propre à l'utilisateur| I[Configuration privée]
+    S -->|Mixte| M[Deux ensembles cohérents]
+    M --> P
+    M --> I
+    S -->|Doute| Q[Confirmation utilisateur via Alfred]
+    Q -->|Décision explicite| S
     P --> R{Destination d'écriture du socle configurée ?}
     R -->|Oui| F[Dépôt maintenu ou fork choisi]
     R -->|Non| L[Proposition conservée localement]
@@ -27,6 +33,19 @@ Une adaptation faite pour un utilisateur va par défaut dans ses points de perso
 L'[exemple de publication](../examples/publication.example.json) contient uniquement des destinations fictives pour l'instance et des références de credentials. Chaque utilisateur remplace les références par les accès qu'il autorise dans son propre coffre.
 
 ## Un service qui publie, des agents qui préparent
+
+Les demandes arrivent aussi bien par Alfred que par un IDE ou un opérateur autorisé. Le documentaliste examine l'effet du changement, et pas l'identité de son auteur, pour proposer la destination. Un chemin de fichier est un indice de périmètre ; il ne prouve pas qu'un texte contenant des données privées puisse être rendu public.
+
+| Classe | Critère | Traitement |
+|---|---|---|
+| Socle | Comportement réutilisable, mécanisme générique, correction ou skill indépendant d'une personne et de ses données | Sources publiques et documentation générique, avec exemples fictifs |
+| Instance | Personnalité, préférence, budget, choix de modèle, connexion, extension ou réglage propre à l'utilisateur | Sources et documentation de son instance privée |
+| Mixte | Une évolution du mécanisme commun nécessite aussi des paramètres propres à l'instance | Deux ensembles séparés et versions liées ; aucune copie brute du contexte privé vers la rédaction publique |
+| Indéterminé | Effet ou périmètre ambigu, information privée potentiellement exposée | Diff conservé ; confirmation explicite via Alfred avant publication |
+
+Exemple : rendre le routage des modèles configurable concerne le socle ; choisir le modèle et le plafond d'un utilisateur concerne son instance. Une nouvelle fonction avec ses paramètres d'instance concerne les deux. Les tâches, sessions, connaissances clients et mémoires évolutives sont des données opérationnelles, pas des changements à publier par ce circuit.
+
+Le documentaliste propose et explique la classification. Les contrôles logiciels vérifient les périmètres de fichiers, les accès, les secrets et la destination ; ils ne déduisent pas à eux seuls la confidentialité de toute phrase. Une classification incertaine ne devient pas une autorisation par défaut. La même procédure s'applique pendant la construction depuis un PC et lorsque les demandes arrivent à Alfred sur la VM.
 
 Le futur service de publication reçoit un ensemble de fichiers explicitement classés et une destination autorisée. Il conserve un diff stable, vérifie les sources et la documentation, recherche les credentials et crée un commit. Le résultat de push est confirmé auprès du dépôt distant avant de déclarer le travail terminé.
 

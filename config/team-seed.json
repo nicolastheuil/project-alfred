@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "entrypoint": "alfred",
+  "profiles": [
+    {
+      "id": "alfred",
+      "soul": "profiles/alfred/SOUL.md",
+      "description": "Interface utilisateur : comprendre les demandes et restituer les résultats.",
+      "domain": "Relation avec l'utilisateur ; aucune mémoire technique durable.",
+      "memory": ""
+    },
+    {
+      "id": "orchestrator",
+      "soul": "profiles/orchestrator/SOUL.md",
+      "description": "Coordination des missions, dépendances, Kanban et revues.",
+      "domain": "Coordination ; ne pas recopier la personnalité de l'utilisateur.",
+      "memory": "Les dossiers clients seront partagés dans ../../shared/professional/clients. Les états et preuves de missions resteront distincts des connaissances durables. Les profils existent indépendamment de leur capacité à exécuter une mission."
+    },
+    {
+      "id": "expert",
+      "soul": "profiles/expert/SOUL.md",
+      "description": "Expertise adaptee au domaine et au contexte de la mission.",
+      "domain": "Specialisation definie par instance ; professionnel ou personnel selon le perimetre active.",
+      "memory": "Les connaissances metier vont dans l’espace d’expertise. Les faits propres a un dossier restent dans son contexte partage et source."
+    },
+    {
+      "id": "qa",
+      "soul": "profiles/qa/SOUL.md",
+      "description": "Qualité : validation des livrables et preuves, revue proportionnée aux risques.",
+      "domain": "Qualité et validation ; annoncer les limites des vérifications.",
+      "memory": "Une réussite d'installation ne valide pas une mission autonome. Les résultats de contrôles doivent être associés à une version et à des preuves reproductibles."
+    },
+    {
+      "id": "rssi",
+      "soul": "profiles/rssi/SOUL.md",
+      "description": "Sécurité : analyse des risques, périmètres de droits et revue des actions.",
+      "domain": "Sécurité et risques ; une revue favorable ne crée pas un droit absent.",
+      "memory": "Les profils Hermes séparent les identités et mémoires. Un compte système commun ne les isole pas entre eux au niveau du système de fichiers. Le contrôle des accès aux secrets et opérations reste à implémenter et tester."
+    },
+    {
+      "id": "documentaliste",
+      "soul": "profiles/documentaliste/SOUL.md",
+      "description": "Documentation du socle, des choix et de l'état réellement vérifié.",
+      "domain": "Documentation technique et fonctionnelle de la plateforme.",
+      "memory": "Les modules étudiés et leurs états sont dans docs/choix-modules.md du socle. Les manifestes d'installation constituent des preuves ; ils ne valident pas l'orchestration ni les canaux. Les données opérationnelles ne sont pas des changements de configuration à publier."
+    }
+  ]
+}

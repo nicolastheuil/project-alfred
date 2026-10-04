@@ -4,23 +4,17 @@ Ce guide décrit **la cible v1**, pas des fonctions déjà toutes déployées. I
 
 ## Une porte d'entrée, plusieurs mains
 
-**Alfred** connaît son utilisateur et reformule son besoin. Il garde la relation et livre le résultat. **Grandchef** organise la mission : étapes, compétences, dépendances et critères d'acceptation. Les **experts** connaissent leurs domaines. **QA** examine les preuves de qualité ; **RSSI** examine les risques lorsqu'ils le nécessitent. Le **documentaliste** explique les changements de la plateforme.
+**Alfred** connaît son utilisateur et reformule son besoin. Il garde la relation et livre le résultat. **Orchestrator** organise la mission : étapes, compétences, dépendances et critères d'acceptation. Les **experts** connaissent leurs domaines. **QA** examine les preuves de qualité ; **RSSI** examine les risques lorsqu'ils le nécessitent. Le **documentaliste** explique les changements de la plateforme.
 
 Une SOUL définit l'identité, le rôle et la façon de travailler d'un agent. Sa mémoire conserve des faits et méthodes utiles. Ce sont deux choses différentes : une instruction de rôle ne constitue pas une preuve sur un client.
 
 ```mermaid
 flowchart TB
     C[IDE ou messagerie] --> A[Alfred : accueil]
-    A --> G[Grandchef : coordination]
+    A --> G[Orchestrator : coordination]
     G --> Q[(Kanban : travail durable)]
-    Q --> S[Systèmes et virtualisation]
-    Q --> N[Réseaux]
-    Q --> B[Sauvegarde]
-    Q --> D[Développement et exploitation]
-    S --> R[Revue adaptée au résultat]
-    N --> R
-    B --> R
-    D --> R
+    Q --> E[Expertise adaptée à la demande]
+    E --> R[Revue adaptée au résultat et au risque]
     R --> G
     G --> A
     A --> C
@@ -31,17 +25,19 @@ Un profil peut exister sans avoir un processus actif. Le scheduler ouvre les pos
 
 ## Un exemple concret
 
-Demande fictive : « Compare deux stratégies de sauvegarde pour le client Démo et prépare une recommandation. »
+Demande fictive : « Compare deux approches pour atteindre mon objectif et prépare une recommandation. »
 
-Alfred comprend le résultat attendu et les contraintes utiles. Grandchef distingue les informations à réunir, l'analyse de sauvegarde, les éventuels points réseau et la vérification. Les experts consultent le même dossier Démo. La revue vérifie les arguments et les sources. Alfred présente le résultat et les incertitudes qui restent pertinentes pour son utilisateur.
+Alfred comprend le résultat attendu, le contexte professionnel ou personnel et les contraintes utiles. Orchestrator distingue les informations à réunir, les expertises nécessaires et la vérification. Les experts concernés consultent le dossier de contexte autorisé. La revue vérifie les arguments et les sources. Alfred présente le résultat et les incertitudes qui restent pertinentes pour son utilisateur.
+
+Le même flux sert à un dossier professionnel, à la marque personnelle, au suivi d'un programme sportif ou à une question de nutrition. Ces exemples sont non exhaustifs : les spécialités sont configurables et ne constituent pas une liste fermée des capacités d'Alfred. Les critères, les sources, les outils et le niveau de revue changent selon le domaine ; les contextes et permissions restent distincts. Une nouvelle spécialité conserve sa SOUL et sa mémoire métier sans alourdir celle d'Alfred. Cela décrit la cible du socle ; le périmètre personnel de l'instance initiale reste à activer.
 
 ```mermaid
 sequenceDiagram
     actor U as Utilisateur
     participant A as Alfred
-    participant G as Grandchef
+    participant G as Orchestrator
     participant K as Kanban
-    participant E as Expert sauvegarde
+    participant E as Expertise adaptée
     participant Q as QA
     U->>A: Résultat souhaité et contraintes
     A->>G: Mission qualifiée et mandat
@@ -59,19 +55,19 @@ Le retour d'un expert ne suffit pas à déclarer la mission terminée. Il faut s
 
 ## Où vit la connaissance ?
 
-L'analogie est celle de trois classeurs : « mon utilisateur », « mon métier » et « nos clients ». Copier tout dans le premier rendrait l'assistant moins clair et multiplierait les contradictions.
+L'analogie est celle de trois classeurs : « mon utilisateur », « mon métier » et « le dossier concerné ». Le dossier peut être celui d'un client professionnel ou d'un contexte personnel autorisé. Copier tout dans le premier rendrait l'assistant moins clair et multiplierait les contradictions.
 
 ```mermaid
 flowchart LR
     A[Alfred] --> U[(Relation utilisateur<br/>Préférences et besoins)]
     E[Experts] --> T[(Mémoires d'expertise<br/>Méthodes par domaine)]
-    E --> C[(Dossiers clients partagés<br/>Faits sourcés et datés)]
-    G[Grandchef] --> K[(Missions<br/>Étapes et preuves)]
+    E --> C[(Dossier de contexte autorisé<br/>Professionnel ou personnel<br/>Faits sourcés et datés)]
+    G[Orchestrator] --> K[(Missions<br/>Étapes et preuves)]
     P[PDF et documents] --> I[Index documentaire]
     I --> E
 ```
 
-Un fait client porte une source, une date et un état : observation, hypothèse, vérifié ou périmé. Un expert peut ainsi distinguer une topologie constatée hier d'une hypothèse ancienne.
+Un fait du dossier porte une source, une date et un état : observation, hypothèse, vérifié ou périmé. Un expert peut ainsi distinguer une observation récente d'une hypothèse ancienne. Les experts concernés partagent ces faits dans le contexte autorisé ; la mémoire relationnelle d'Alfred et les données des autres contextes ne sont pas recopiées dans leurs mémoires.
 
 L'index documentaire aide à retrouver un passage utile. Il ne transforme pas un PDF en connaissance certaine du modèle et ne remplace pas une vérification. La référence, la version et le contexte du passage restent nécessaires.
 
@@ -81,7 +77,7 @@ Le harness prépare le contexte et encadre les outils. Le modèle propose un pla
 
 ```mermaid
 flowchart TD
-    D[Demande et résultat attendu] --> C[Contexte utile<br/>Rôle, client, sources, mandat]
+    D[Demande et résultat attendu] --> C[Contexte utile<br/>Rôle, dossier, sources, mandat]
     C --> H[Hypothèses et informations manquantes]
     H --> P[Plan d'actions proposé]
     P --> M{Action dans le mandat<br/>et permissions effectives ?}

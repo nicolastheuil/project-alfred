@@ -15,13 +15,14 @@ Alfred est le point d'entrée d'une équipe d'agents spécialisés. Il comprend 
 - [Installer le socle système et le moteur sur Debian 12 ARM64](docs/installation.md)
 - [Choix des outils et étude de l’écosystème](docs/ecosysteme.md)
 - [ECC, Context7, Headroom, RTK et zram : décisions et état d'installation](docs/choix-modules.md)
+- [Composer les identités et répartir les mémoires](docs/identites-memoires.md)
 - [Crédits, licences et rôle des composants utilisés](THIRD_PARTY_NOTICES.md)
 - [Contrat de la plateforme](config/platform-contract.json)
 
 ```mermaid
 flowchart LR
     U[Utilisateur] --> A[Alfred<br/>Comprendre et restituer]
-    A --> G[Grandchef<br/>Planifier et coordonner]
+    A --> G[Orchestrator<br/>Planifier et coordonner]
     G --> K[Kanban<br/>Étapes et preuves]
     K --> E[Experts<br/>Produire]
     E --> V[Revues<br/>Vérifier]
