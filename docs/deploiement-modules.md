@@ -32,7 +32,7 @@ sudo -u alfred env HERMES_HOME=/var/lib/alfred-agent/.hermes/profiles/alfred \
 sudo -u alfred env HERMES_HOME=/var/lib/alfred-agent/.hermes/profiles/dev \
  /opt/alfred/current/venv/bin/python tools/check_rtk.py
 python tools/check_instructions.py --executable alfred-lint
-alfred-service-status
+sudo -u alfred alfred-service-status
 ```
 
 Le contrôle natif n'appelle aucun modèle ni ne contacte un utilisateur. Le mode Context7 transmet des questions publiques, vérifie une référence versionnée, un endpoint inaccessible et l'accès au repli officiel. Les missions autonomes restent à tester séparément. Les manifestes locaux ne contiennent pas de credentials.

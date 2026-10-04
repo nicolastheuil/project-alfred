@@ -30,7 +30,8 @@ jobs:
       - name: Check supervision failure paths
         run: python tools/test_service_monitor.py
       - name: Install pinned instruction linter
-        run: python -m pip install --require-hashes --only-binary=:all: -r deploy/runtime/lintlang-requirements.lock
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r deploy/runtime/lintlang-requirements.lock
       - name: Review maintained instructions
         run: python tools/check_instructions.py
       - name: Check history for credentials

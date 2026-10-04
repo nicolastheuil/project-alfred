@@ -112,7 +112,8 @@ def main():
         raise SystemExit("Stop all service-account processes before identity composition")
     os.umask(0o077)
     metadata.mkdir(mode=0o700, exist_ok=True)
-    os.chmod(metadata, 0o700)
+    os.chown(metadata, 0, account.pw_gid)
+    os.chmod(metadata, 0o750)
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     backup = metadata / "identity-backups" / stamp
     backup.mkdir(mode=0o700, parents=True)
