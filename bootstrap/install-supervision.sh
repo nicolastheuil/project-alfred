@@ -3,7 +3,7 @@ set -euo pipefail
 [[ $(id -u) == 0 ]] || { echo 'Run as root' >&2; exit 1; }
 platform_root="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
 install -d -m 0755 /etc/alfred /usr/local/lib/alfred
-install -d -m 0700 /var/lib/alfred/monitor
+install -d -o root -g alfred -m 0750 /var/lib/alfred/monitor
 chgrp alfred /var/lib/alfred
 chmod 0750 /var/lib/alfred
 install -m 0644 "$platform_root/deploy/runtime/service-monitor.py" /usr/local/lib/alfred/service-monitor.py

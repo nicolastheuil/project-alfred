@@ -67,7 +67,7 @@ def probe(item):
     kind = item['kind']
     if kind == 'heartbeat':
         value = load(Path(item['path']), {})
-        stamp = datetime.fromisoformat(value['updated_at'].replace('Z', '+00:00')).timestamp()
+        stamp = datetime.fromisoformat(value[item.get('timestamp_field', 'updated_at')].replace('Z', '+00:00')).timestamp()
         if not -10 <= time.time() - stamp <= item['max_age']:
             raise ValueError('heartbeat stale')
     elif kind == 'http_json':

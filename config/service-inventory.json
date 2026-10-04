@@ -14,7 +14,7 @@
       ]
     },
     {"unit": "zramswap.service", "kind": "oneshot", "grace_seconds": 60, "probes": [{"kind": "zram"}]},
-    {"unit": "alfred-monitor.timer", "kind": "timer", "grace_seconds": 240, "probes": [{"kind": "heartbeat", "path": "/var/lib/alfred/monitor/health.json", "max_age": 180}]},
+    {"unit": "alfred-monitor.timer", "kind": "timer", "grace_seconds": 240, "probes": [{"kind": "heartbeat", "path": "/var/lib/alfred/monitor/health.json", "timestamp_field": "at", "max_age": 180}]},
     {"unit": "alfred-recovery.service", "kind": "job", "auto_restart": false, "probes": []}
   ]
 }

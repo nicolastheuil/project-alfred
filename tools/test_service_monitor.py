@@ -12,6 +12,17 @@ spec.loader.exec_module(monitor)
 
 
 class RecoveryChecks(unittest.TestCase):
+    def test_monitor_report_timestamp_field_and_stale_detection(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'health.json'
+            path.write_text('{"at":"1970-01-01T00:16:40+00:00"}')
+            probe = {'kind': 'heartbeat', 'path': str(path), 'timestamp_field': 'at', 'max_age': 180}
+            with patch.object(monitor.time, 'time', return_value=1100):
+                monitor.probe(probe)
+            with patch.object(monitor.time, 'time', return_value=1200):
+                with self.assertRaises(ValueError):
+                    monitor.probe(probe)
+
     def test_delivery_failure_preserves_one_episode_across_ticks(self):
         config = {'services': [{'unit': 'fake.service', 'auto_restart': False}],
                   'failure_threshold': 3, 'restart_limit_per_hour': 2}
