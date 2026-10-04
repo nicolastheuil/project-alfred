@@ -1,15 +1,14 @@
 [Unit]
 Description=Alfred deterministic service and channel health checks
 After=network-online.target
-StartLimitIntervalSec=900
-StartLimitBurst=5
+# The timer is the bounded retry mechanism; successful minute ticks must never hit a start quota.
+StartLimitIntervalSec=0
 
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/python3 -I /usr/local/lib/alfred/service-monitor.py
 TimeoutStartSec=90s
-Restart=on-failure
-RestartSec=30s
+Restart=no
 UMask=0077
 PrivateTmp=yes
 ProtectSystem=full

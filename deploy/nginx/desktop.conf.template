@@ -1,0 +1,49 @@
+# Public template: instance values and TLS key material are supplied outside Git.
+map $http_upgrade $alfred_connection_upgrade {
+    default upgrade;
+    '' close;
+}
+limit_req_zone $binary_remote_addr zone=alfred_login:1m rate=5r/m;
+log_format alfred_safe '$remote_addr $request_method $uri $status';
+server {
+    listen @@TLS_PORT@@ ssl default_server;
+    server_name _;
+    ssl_certificate @@CERTIFICATE@@;
+    ssl_certificate_key @@PRIVATE_KEY@@;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    return 444;
+}
+server {
+    listen @@TLS_PORT@@ ssl;
+    server_name @@HOSTNAME@@;
+    ssl_certificate @@CERTIFICATE@@;
+    ssl_certificate_key @@PRIVATE_KEY@@;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    server_tokens off;
+    client_max_body_size 32m;
+    access_log /var/log/nginx/alfred-access.log alfred_safe;
+    error_log /var/log/nginx/alfred-error.log crit;
+    add_header X-Content-Type-Options nosniff always;
+    location = /auth/password-login {
+        limit_req zone=alfred_login burst=5 nodelay;
+        limit_req_status 429;
+        proxy_pass http://127.0.0.1:9119;
+        proxy_set_header Host @@AUTHORITY@@;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Host @@AUTHORITY@@;
+    }
+    location / {
+        proxy_pass http://127.0.0.1:9119;
+        proxy_http_version 1.1;
+        proxy_set_header Host @@AUTHORITY@@;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Host @@AUTHORITY@@;
+        proxy_set_header X-Forwarded-Prefix '';
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $alfred_connection_upgrade;
+        proxy_read_timeout 86400s;
+        proxy_send_timeout 86400s;
+    }
+}

@@ -98,6 +98,25 @@ class RecoveryChecks(unittest.TestCase):
             monitor.tick(config, {})
             command.assert_not_called()
 
+    def test_tls_failure_is_not_reported_as_a_healthy_service(self):
+        config = {'unit': 'nginx.service', 'probes': [{'kind': 'tls', 'host': '127.0.0.1', 'port': 8443, 'server_name': 'example.org'}]}
+        with patch.object(monitor, 'properties', return_value={'LoadState': 'loaded', 'ActiveState': 'active', 'ActiveEnterTimestampMonotonic': '0'}), \
+             patch.object(monitor.ssl, 'create_default_context') as context, \
+             patch.object(monitor.socket, 'create_connection'):
+            context.return_value.wrap_socket.side_effect = monitor.ssl.SSLCertVerificationError('invalid chain')
+            healthy, reason, _ = monitor.health(config)
+            self.assertFalse(healthy)
+            self.assertEqual(reason, 'probe_0_tls_failed')
+
+    def test_tls_probe_warns_before_expiry(self):
+        with patch.object(monitor.ssl, 'create_default_context') as context, \
+             patch.object(monitor.socket, 'create_connection'), \
+             patch.object(monitor.time, 'time', return_value=100000):
+            secured = context.return_value.wrap_socket.return_value.__enter__.return_value
+            secured.getpeercert.return_value = {'notAfter': 'Jan  2 04:00:00 1970 GMT'}
+            with self.assertRaises(ValueError):
+                monitor.probe({'kind': 'tls', 'host': '127.0.0.1', 'port': 8443, 'server_name': 'example.org', 'min_validity_seconds': 1209600})
+
 
 if __name__ == '__main__':
     unittest.main()

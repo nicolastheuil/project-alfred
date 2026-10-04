@@ -36,3 +36,9 @@ Le job déterministe de contrôle possède aussi Restart=on-failure et une limit
 ## Ajouter un service de socle ou d’instance
 
 Des fragments root-owned `/etc/alfred/service-inventory.d/*.json`, de forme `{"services": [...]}`, complètent l’inventaire principal. Une unité ne peut pas être déclarée deux fois : un fragment ne remplace jamais silencieusement une sonde du socle. Les extensions restent présentes lorsqu’un bootstrap régénère l’inventaire principal. Un service temporaire normalement inactif doit être suivi par son contrôleur de cycle de vie ; inscrire son contrôle permanent, plutôt que relancer aveuglément le travail temporaire. Le backend Desktop fournit son propre fragment et sa sonde HTTP.
+
+## Fréquence du moniteur et santé HTTPS
+
+Le moniteur est un oneshot lancé chaque minute par son timer. Son quota de démarrages est désactivé et `Restart=no` : le timer borne les nouvelles tentatives. Un quota de cinq démarrages sur quinze minutes bloquait aussi les exécutions réussies ; cette configuration a été corrigée et six démarrages consécutifs ont été vérifiés. Les quotas de redémarrage des services surveillés restent bornés.
+
+La sonde `tls` vérifie chaîne de confiance, nom d’hôte et validité restante du certificat présenté, pour chaque domaine publié. Sous 14 jours, elle produit un échec de santé et suit l’escalade habituelle ; une simple relance Nginx ne renouvelle pas un certificat. La validation DNS manuelle implique une intervention de l’opérateur.

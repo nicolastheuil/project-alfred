@@ -1,0 +1,20 @@
+# Optional Teams endpoint sharing the TLS port; Bot Framework authenticates messages.
+server {
+    listen @@TLS_PORT@@ ssl;
+    server_name @@HOSTNAME@@;
+    ssl_certificate @@CERTIFICATE@@;
+    ssl_certificate_key @@PRIVATE_KEY@@;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    server_tokens off;
+    access_log /var/log/nginx/alfred-access.log alfred_safe;
+    error_log /var/log/nginx/alfred-error.log crit;
+    client_max_body_size 4m;
+    location = /api/messages {
+        limit_except POST { deny all; }
+        proxy_pass http://127.0.0.1:8645;
+        proxy_set_header Host @@HOSTNAME@@;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+    location / { return 404; }
+}

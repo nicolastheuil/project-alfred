@@ -7,6 +7,7 @@ from pathlib import Path
 import pwd
 import re
 import socket
+import ssl
 import uuid
 import subprocess
 import time
@@ -93,6 +94,13 @@ def probe(item):
     elif kind == 'tcp':
         with socket.create_connection((item['host'], item['port']), timeout=4):
             pass
+    elif kind == 'tls':
+        context = ssl.create_default_context()
+        with socket.create_connection((item['host'], item['port']), timeout=4) as connection:
+            with context.wrap_socket(connection, server_hostname=item['server_name']) as secured:
+                remaining = ssl.cert_time_to_seconds(secured.getpeercert()['notAfter']) - time.time()
+                if remaining < item.get('min_validity_seconds', 1209600):
+                    raise ValueError('TLS certificate renewal required')
     elif kind == 'zram':
         if '/dev/zram0' not in Path('/proc/swaps').read_text():
             raise ValueError('zram swap missing')

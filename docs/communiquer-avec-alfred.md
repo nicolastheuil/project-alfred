@@ -4,8 +4,8 @@ Plusieurs portes donnent accès au même profil d’interface, Alfred. Son rôle
 
 ```mermaid
 flowchart LR
-    D[Hermes Desktop<br/>Remote gateway] -.-> H[HTTPS authentifié<br/>cible recommandée]
-    H -.-> B[Backend headless local<br/>systemd]
+    D[Hermes Desktop<br/>Remote gateway] --> H[HTTPS authentifié]
+    H --> B[Backend headless local<br/>systemd]
     I[IDE<br/>terminal ou client ACP compatible] --> T[SSH vers CLI ou ACP]
     W[WhatsApp] --> G[Gateway de messagerie]
     M[Teams] --> G
@@ -16,7 +16,7 @@ flowchart LR
     O --> A
 ```
 
-Les flèches pointillées représentent l’accès HTTPS de Desktop, encore à déployer et à éprouver. Les autres accès conservent leurs essais d’acceptation propres.
+Le backend HTTPS, son authentification native et le WebSocket sont vérifiés sur l’instance de validation. Les conversations utilisateur de chaque canal conservent leurs essais d’acceptation propres.
 
 Le profil et ses préférences sont communs ; les conversations de chaque canal peuvent avoir leurs propres sessions. Cette architecture ne promet pas une fusion automatique de tous les historiques. Les missions durables doivent porter le contexte utile à leur reprise.
 
@@ -24,7 +24,7 @@ Le profil et ses préférences sont communs ; les conversations de chaque canal 
 
 Hermes Desktop se connecte directement à l’adresse HTTPS de l’instance. Le fonctionnement visé est : **Desktop → HTTPS authentifié → backend Hermes supervisé → profil Alfred**. Le serveur reste disponible lorsque Desktop se ferme.
 
-**État du déploiement :** le backend local est installé et testé. Sa publication HTTPS, son authentification et le renouvellement automatique du certificat restent à finaliser. La procédure suivante décrit les champs de la connexion retenue ; elle devient utilisable dès que l’endpoint HTTPS de l’instance est validé. L’adresse et le compte réels sont documentés dans le dépôt privé de chaque utilisateur.
+**État du déploiement :** le backend HTTPS est installé et vérifié sur l’instance de validation. Le compte local par mot de passe est le fournisseur actif ; le parcours natif Desktop et le WebSocket sont testés. OAuth Nous a été étudié et sa redirection vérifiée, puis désactivé selon le choix de l’utilisateur de cette instance. Chaque installation conserve son propre choix d’authentification. Le parcours de connexion Desktop, le refus anonyme et le WebSocket authentifié sont testés. Une connexion réussie dans l’application utilisateur et une demande/réponse réelle conservent leur validation. Chaque instance choisit son domaine, son port public et son fournisseur d’authentification ; ces valeurs sont dans son dépôt privé.
 
 ### Ajouter la connexion
 
@@ -33,16 +33,16 @@ Dans **Settings → Gateways**, cliquer **Add connection**, puis choisir **Remot
 | Champ à l’écran | Réglage |
 |---|---|
 | **Name** | `Alfred`, ou un nom unique pour cette instance |
-| **Gateway URL** | L’URL HTTPS de l’instance, par exemple `https://alfred.example.org` |
+| **Gateway URL** | L’URL HTTPS de l’instance, par exemple `https://alfred.example.org`, ou `https://alfred.example.org:28443` si le port public est différent de 443 |
 | **Authentication** | **Sign in**, pour la gateway avec authentification native |
 | **Session token** | Aucun token à coller avec **Sign in** |
 | **Extra gateway headers** | Laisser vide pour une publication HTTPS classique ; renseigner uniquement les en-têtes exigés par un éventuel proxy d’accès configuré pour cette instance |
 
-L’exemple `alfred.example.org` doit être remplacé par le domaine de son instance. L’URL est celle de la gateway, sans chemin `/api/ws`, sans callback Teams et sans adresse de boucle locale du PC.
+L’exemple `alfred.example.org` doit être remplacé par le domaine de son instance. Si la connexion Internet impose des ports publics hauts, l’URL inclut ce port. Plusieurs domaines peuvent partager une redirection vers le même reverse proxy, qui les distingue par leur nom ; aucune seconde règle NAT n’est nécessaire uniquement pour séparer Desktop et Teams. L’URL est celle de la gateway, sans chemin `/api/ws`, sans callback Teams et sans adresse de boucle locale du PC.
 
 Après avoir renseigné l’URL, choisir **Sign in** et terminer la connexion dans la fenêtre d’authentification de la gateway. Selon le fournisseur configuré sur le serveur, cette fenêtre présente un identifiant et un mot de passe, ou une connexion OAuth. **Sign in** ne signifie donc pas obligatoirement posséder un compte Nous. Desktop conserve la session de connexion ; les identifiants restent privés.
 
-Cliquer **Save connection**, puis **Test** sur la connexion enregistrée. Le test doit valider HTTP et WebSocket. Ensuite, sélectionner cette gateway dans **Sessions**, choisir le profil **Alfred** et envoyer une première demande pour vérifier une réponse complète. Définir la connexion comme **Primary** si elle doit devenir l’instance par défaut ; la connexion locale **This device**, gérée par Desktop, peut rester présente.
+Cliquer **Save connection**, puis **Test** sur la connexion enregistrée. Le test doit valider HTTP et WebSocket. Ensuite, sélectionner cette gateway dans **Sessions**, choisir le profil **Alfred** et envoyer une première demande pour vérifier une réponse complète. Définir la connexion comme **Primary** si elle doit devenir l’instance par défaut ; la connexion locale **This device**, gérée par Desktop, peut rester présente. Le backend du socle utilise Alfred comme contexte par défaut. Dans Desktop, un profil choisi explicitement prend toutefois priorité : sélectionner un expert ouvre une conversation directe avec lui. Pour l’usage d’assistant, conserver **Alfred** sélectionné et lui confier la demande ; la liste des experts n’est pas un routage automatique vers Alfred.
 
 ### Comprendre le formulaire
 
@@ -80,4 +80,4 @@ La commande d’accès `sudo` doit être autorisée dans les droits de l’opér
 
 ## Ce qui est vérifié
 
-Sur l’instance de validation Debian 12 ARM64, le backend écoute uniquement sur 127.0.0.1, sert le contexte Alfred et répond en HTTP et WebSocket avec son token. Les accès sensibles anonymes sont rejetés. Ces contrôles portent sur le backend local et son authentification ; la publication HTTPS reste à vérifier. De même, la configuration UI du Desktop, une conversation utilisateur, les livraisons WhatsApp/Teams et chaque raccordement graphique IDE conservent leurs essais d’acceptation propres.
+Sur l’instance Debian 12 ARM64 : certificat HTTPS reconnu depuis Windows ; formulaire de connexion disponible ; sessions sensibles anonymes et mauvais mot de passe refusés ; connexion correcte acceptée ; cookies Secure ; parcours natif Desktop avec PKCE et échange de code testé ; WebSocket authentifié accepté, ticket réutilisé et accès anonyme refusés ; contexte actif Alfred confirmé. Le reverse proxy est supervisé, redémarre automatiquement et possède une sonde TLS pour chaque domaine, avec alerte avant échéance. Ces preuves de transport et d’authentification ne remplacent pas une conversation utilisateur dans Desktop ou les livraisons de messagerie.
