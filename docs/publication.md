@@ -32,7 +32,7 @@ Une adaptation faite pour un utilisateur va par défaut dans ses points de perso
 
 L'[exemple de publication](../examples/publication.example.json) contient uniquement des destinations fictives pour l'instance et des références de credentials. Chaque utilisateur remplace les références par les accès qu'il autorise dans son propre coffre.
 
-## Un service qui publie, des agents qui préparent
+## Le documentaliste publie via un broker contrôlé
 
 Les demandes arrivent aussi bien par Alfred que par un IDE ou un opérateur autorisé. Le documentaliste examine l'effet du changement, et pas l'identité de son auteur, pour proposer la destination. Un chemin de fichier est un indice de périmètre ; il ne prouve pas qu'un texte contenant des données privées puisse être rendu public.
 
@@ -47,7 +47,7 @@ Exemple : rendre le routage des modèles configurable concerne le socle ; choisi
 
 Le documentaliste propose et explique la classification. Les contrôles logiciels vérifient les périmètres de fichiers, les accès, les secrets et la destination ; ils ne déduisent pas à eux seuls la confidentialité de toute phrase. Une classification incertaine ne devient pas une autorisation par défaut. La même procédure s'applique pendant la construction depuis un PC et lorsque les demandes arrivent à Alfred sur la VM.
 
-Le futur service de publication reçoit un ensemble de fichiers explicitement classés et une destination autorisée. Il conserve un diff stable, vérifie les sources et la documentation, recherche les credentials et crée un commit. Le résultat de push est confirmé auprès du dépôt distant avant de déclarer le travail terminé.
+Le broker de publication reçoit un ensemble de fichiers explicitement classés et une destination autorisée. Il conserve un diff stable, vérifie les sources et la documentation, recherche les credentials et crée un commit. Le résultat de push est confirmé auprès du dépôt distant avant de déclarer le travail terminé.
 
 Chaque destination utilise un accès limité au dépôt concerné. Les agents ordinaires n'ont pas de credential permettant de publier arbitrairement sur le compte GitHub. Le contexte de rédaction publique reste limité aux sources publiques, tandis que la rédaction privée traite les paramètres autorisés de l'instance.
 
@@ -61,4 +61,18 @@ La mise à jour d'une tâche, d'une session ou d'une mémoire opérationnelle su
 
 ## État de mise en place
 
-Les fichiers d'exemple et le contrat de routage existent. Le service automatique, ses accès limités, la file de reprise et les essais de permissions restent à implémenter et tester. Une publication manuelle réussie ne démontre pas encore ce circuit autonome.
+Le broker privilégié, les workspaces de sources et le skill de maintenance sont implémentés et opérationnels. Le documentaliste lui transmet une liste explicite de fichiers et reçoit une confirmation distante. Le déclenchement vient de la mission Kanban et de ses consignes ; il n’existe pas encore de détection automatique de toute dérive hors mission. Une publication réussie ne certifie pas tous les workflows ni une reconstruction complète.
+
+La reprise du contexte professionnel sans les préférences exclues est effective. Les sources sont accessibles à Alfred. Les scopes sont corrigés par D-Bus (manager utilisateur pour les scopes workers) et le bus est exposé à la gateway malgré ProtectHome. La publication s'effectue via le broker contrôlé.
+
+## Installer et utiliser le broker
+
+Installer les scopes workers avec `sudo python3 bootstrap/install-workers.py`, puis le broker avec `sudo python3 bootstrap/install-publication.py --instance-source /chemin/instance --credential-file /chemin/root/credential.json`. Le fichier credential contient un objet avec une clé token, reste root:root 0600, hors Git. Une seconde référence `--platform-credential-file` permet des accès distincts. Les destinations proviennent de publication.json de l’instance, jamais d’une requête agent. Une installation sans destination d’écriture du socle ne peut pas publier vers celui-ci.
+
+Gitleaks ARM64 est verrouillé par version et SHA256 dans publication-dependencies.lock.json. Le broker conserve ses clones root sous /var/lib/alfred/publication ; les agents ne reçoivent que les sources dans shared/repositories/platform et shared/repositories/instance. Les hooks sont désactivés ; les configs Git des workspaces agents ne sont pas utilisés. Aucun token n’est renvoyé par les actions status, sync, publish ou retry.
+
+Alfred consulte le contexte et les sources pour qualifier la demande, puis transmet à Orchestrator. Platform Engineer réalise les changements de fonctionnement ; le documentaliste documente, classe et publie, sous le mandat permanent. Les revues QA/RSSI sont choisies selon le besoin. Une tâche ordinaire n’ajoute ni documentaire produit ni publication de données métier.
+
+Le broker refuse chemins de secrets, données opérationnelles, symlinks, sources trop grosses, erreurs de syntaxe, secrets détectés et base Git obsolète. Il ne sait pas classifier le sens de toute information personnelle : le documentaliste doit contrôler les contextes public/privé et demander l’arbitrage en cas de doute. Les agents partagent encore un compte Unix : ces profils ne constituent pas une isolation de sécurité.
+
+Une erreur de push conserve le commit. retry ne publie que si la branche distante est ancêtre du commit local ; une divergence ne déclenche jamais de force-push. Les deux dépôts se publient successivement, et le verrou privé doit pointer le commit public confirmé. Les journaux de publication restent privés, hors Git.

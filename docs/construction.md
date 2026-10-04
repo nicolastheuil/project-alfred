@@ -4,6 +4,8 @@
 
 Le contrat de plateforme, les modèles de SOUL, les schémas de personnalisation documentés, le guide illustré, la préparation système Debian, l'installation du moteur Hermes verrouillé, les crédits des composants, la supervision systemd les modules experts retenus et les contrôles de cohérence et de publication. Le contrôle CI vérifie ces artefacts et la syntaxe du bootstrap ; il ne certifie pas encore une installation de production.
 
+Le documentaliste est responsable des mises à jour GitHub pour les changements durables. Le circuit de publication via le broker privilégié est en place : sources communes accessibles à Alfred, Orchestrator, Platform Engineer et Documentaliste ; classification socle/instance/mixte ; verrouillage du commit socle dans platform.lock.json avant publication de l'instance.
+
 ## Ce qui reste à construire et éprouver
 
 - Bootstrap complet d'une instance sur VM vierge : prérequis et moteur ont été exécutés ; composition des profils, accès et état restent à éprouver.
