@@ -1,6 +1,6 @@
 ---
 name: ecc-iterative-retrieval
-description: Use when an expert lacks mission context: refine retrieval in at most three passes.
+description: "Use when an expert lacks mission context: refine retrieval in at most three passes."
 ---
 
 # Chercher juste assez de contexte

@@ -1,6 +1,6 @@
 ---
 name: context7-documentation
-description: Use when public library documentation is needed: check the installed version and official fallback.
+description: "Use when public library documentation is needed: check the installed version and official fallback."
 ---
 
 # Consulter une documentation ciblée

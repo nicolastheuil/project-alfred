@@ -1,6 +1,6 @@
 ---
 name: rtk-git
-description: Use when Git inspection output is verbose: explicitly condense status, log, diff or show and retain raw evidence.
+description: "Use when Git inspection output is verbose: explicitly condense status, log, diff or show and retain raw evidence."
 ---
 
 # Lire des sorties Git condensées

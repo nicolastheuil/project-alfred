@@ -1,6 +1,6 @@
 ---
 name: configuration-lint
-description: Use before publishing changes to SOUL, skills or agent instructions: run LintLang and review coverage.
+description: "Use before publishing changes to SOUL, skills or agent instructions: run LintLang and review coverage."
 ---
 
 # Relire les instructions de configuration

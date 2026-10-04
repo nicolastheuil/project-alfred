@@ -1,6 +1,6 @@
 ---
 name: ecc-security-review
-description: Use when a change affects access, secrets, external inputs, dependencies or publication.
+description: "Use when a change affects access, secrets, external inputs, dependencies or publication."
 ---
 
 # Examiner les risques du changement

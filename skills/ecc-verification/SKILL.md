@@ -1,6 +1,6 @@
 ---
 name: ecc-verification
-description: Use before delivering a changed artifact: run proportional checks and retain evidence.
+description: "Use before delivering a changed artifact: run proportional checks and retain evidence."
 ---
 
 # Vérifier ce qui a changé
