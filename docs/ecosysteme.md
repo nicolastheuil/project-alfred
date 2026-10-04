@@ -17,7 +17,7 @@ LintLang indique notamment qu'il ne détecte pas les contradictions sémantiques
 
 ## Composants connus à réévaluer
 
-La zram peut aider une VM contrainte en mémoire ; sa configuration et son coût CPU doivent être mesurés sur l'hôte cible. Les skills ECC sont des références à sélectionner par rôle. Context7 est un accès documentaire optionnel pour le développement. Headroom et RTK doivent montrer un gain réel de contexte ou de coût tout en conservant les preuves nécessaires.
+Les décisions détaillées, les dépôts source, les licences et les critères d'acceptation sont dans [ECC, Context7, Headroom, RTK et zram](choix-modules.md). ECC sera repris par sélection de skills ; Context7 est prévu à la demande pour le développement. Headroom est différé et RTK reste candidat à un essai ciblé. Aucun des quatre n'est encore installé dans la v1. La zram est installée et son activation après redémarrage a été vérifiée ; son coût CPU et son comportement en charge restent à mesurer.
 
 Les grands frameworks d'équipe, mémoires vectorielles et tableaux de contrôle supplémentaires restent des options. Leur ajout doit résoudre un problème identifié qui n'est pas déjà traité par le moteur et le harness.
 

@@ -25,4 +25,6 @@ Les paquets Python indirects restent décrits dans le `uv.lock` d'Hermes au comm
 
 ## Comment cet inventaire évolue
 
+ECC (affaan-m et contributeurs, MIT), Context7 (Upstash et contributeurs, MIT), Headroom (Headroom Labs et contributeurs, Apache-2.0) et RTK (rtk-ai et contributeurs, Apache-2.0) sont crédités dans l'[étude détaillée des modules](docs/choix-modules.md), avec leurs dépôts source et révisions examinées. Leurs fonctions et choix sont documentés ; ils ne sont pas encore des dépendances installées de la v1.
+
 Tout composant ajouté doit avoir une origine, une version identifiable, une explication de sa fonction et une raison du choix. Son état passe à « installé » ou « validé » seulement après vérification réelle. Les outils simplement envisagés restent dans l'[étude de l'écosystème](docs/ecosysteme.md), avec leurs sources et les critères à vérifier avant adoption.

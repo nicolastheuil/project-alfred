@@ -14,6 +14,7 @@ Alfred est le point d'entrée d'une équipe d'agents spécialisés. Il comprend 
 - [Construction de la v1 et critères de validation](docs/construction.md)
 - [Installer le socle système et le moteur sur Debian 12 ARM64](docs/installation.md)
 - [Choix des outils et étude de l’écosystème](docs/ecosysteme.md)
+- [ECC, Context7, Headroom, RTK et zram : décisions et état d'installation](docs/choix-modules.md)
 - [Crédits, licences et rôle des composants utilisés](THIRD_PARTY_NOTICES.md)
 - [Contrat de la plateforme](config/platform-contract.json)
 
