@@ -94,6 +94,10 @@ def probe(item):
     elif kind == 'tcp':
         with socket.create_connection((item['host'], item['port']), timeout=4):
             pass
+    elif kind == 'unix_socket':
+        with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as connection:
+            connection.settimeout(4)
+            connection.connect(item['path'])
     elif kind == 'tls':
         context = ssl.create_default_context()
         with socket.create_connection((item['host'], item['port']), timeout=4) as connection:

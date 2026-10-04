@@ -13,3 +13,7 @@ Commencer par `/usr/local/bin/alfred-service-status`, qui vérifie les probes sa
 `alfred-service-status` exécute réellement les probes de l'inventaire. Son verdict horodaté fait autorité pour ces contrôles techniques ; il ne s'agit pas d'une déclaration du modèle. Les protections de confidentialité peuvent masquer des adresses dans d'autres sorties : cela n'invalide pas les probes effectuées par cette commande. Un incident annoté `test_context` peut correspondre à une panne d'acceptation volontaire ; ne pas la présenter comme une panne spontanée ni demander des secrets pour identifier sa cause déjà déclarée.
 
 Un retour à `active` ne suffit pas : vérifier la réponse du canal concerné et le heartbeat. Conserver le diagnostic et les contrôles dans le dossier d'incident puis mettre à jour la carte Kanban. Si une opération dépasse les droits effectifs, bloquer la carte avec le besoin précis pour Alfred. Une relance ne prouve pas la correction de la cause.
+
+## Sources du harness
+
+Lire platform-maintenance et le contexte actif avant une modification du harness. Les sources publiques réutilisables et paramètres privés sont séparés. Transmettre le diff, les validations, les impacts et le retour arrière à Orchestrator ; le documentaliste assure ensuite les explications et la publication. Une réparation de service n'exempte pas une modification durable de ce circuit.

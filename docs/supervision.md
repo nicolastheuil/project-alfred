@@ -42,3 +42,9 @@ Des fragments root-owned `/etc/alfred/service-inventory.d/*.json`, de forme `{"s
 Le moniteur est un oneshot lancé chaque minute par son timer. Son quota de démarrages est désactivé et `Restart=no` : le timer borne les nouvelles tentatives. Un quota de cinq démarrages sur quinze minutes bloquait aussi les exécutions réussies ; cette configuration a été corrigée et six démarrages consécutifs ont été vérifiés. Les quotas de redémarrage des services surveillés restent bornés.
 
 La sonde `tls` vérifie chaîne de confiance, nom d’hôte et validité restante du certificat présenté, pour chaque domaine publié. Sous 14 jours, elle produit un échec de santé et suit l’escalade habituelle ; une simple relance Nginx ne renouvelle pas un certificat. La validation DNS manuelle implique une intervention de l’opérateur.
+
+## Workers natifs et session utilisateur
+
+Les workers Hermes utilisent des scopes systemd utilisateur pour survivre à une relance de gateway et isoler leur comptabilité mémoire. Une VM headless avec un compte de service sans session D-Bus peut refuser tous les lancements. install-workers.py installe dbus-user-session, active loginctl enable-linger pour le compte de service, place user@UID.service dans alfred-runtime.slice et teste un scope réel. Le drop-in gateway attend ce manager au démarrage.
+
+Le manager et la connexion à son socket D-Bus sont ajoutés à l’inventaire. Le moniteur peut les relancer de manière bornée puis ouvrir un incident spécialisé ; l’activation ne contourne pas les plafonds de deux missions et un travail par profil. Les scopes restent dans le budget global, même après une relance de gateway.

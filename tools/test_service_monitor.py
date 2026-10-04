@@ -2,6 +2,7 @@
 import importlib.util
 from pathlib import Path
 import tempfile
+import socket
 import unittest
 from unittest.mock import patch
 
@@ -12,6 +13,21 @@ spec.loader.exec_module(monitor)
 
 
 class RecoveryChecks(unittest.TestCase):
+    def test_unix_socket_probe_connects_to_live_bus(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = str(Path(folder) / 'bus')
+            with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
+                server.bind(path)
+                server.listen(1)
+                monitor.probe({'kind': 'unix_socket', 'path': path})
+
+    def test_unix_socket_probe_rejects_regular_file(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'bus'
+            path.write_text('not-a-bus')
+            with self.assertRaises(OSError):
+                monitor.probe({'kind': 'unix_socket', 'path': str(path)})
+
     def test_extensions_survive_base_inventory_replacement(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

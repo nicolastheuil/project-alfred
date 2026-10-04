@@ -74,7 +74,7 @@ def main():
             soul += "\nLa mémoire relationnelle de l'utilisateur appartient exclusivement au profil d'interface."
         config = {"memory": {"memory_enabled": True, "user_profile_enabled": name == team["entrypoint"],
                              "memory_char_limit": 2200, "user_char_limit": 1375}}
-        selected = ["terminal", "file", "memory", "skills", "clarify"] if name == team["entrypoint"] else ["terminal", "file", "memory", "skills", "kanban", "web", "todo"]
+        selected = ["terminal", "file", "memory", "skills", "clarify", "kanban"] if name == team["entrypoint"] else ["terminal", "file", "memory", "skills", "kanban", "web", "todo"]
         config["agent"] = {"disabled_toolsets": ["browser", "code_execution", "computer_use", "cronjob", "delegation"]}
         config["platform_toolsets"] = {platform: selected for platform in ["cli", "acp", "whatsapp", "teams"]}
         contents = {"SOUL.md": soul, "memories/USER.md": user, "memories/MEMORY.md": memory,
@@ -83,6 +83,8 @@ def main():
             plan[f"profiles/{name}/{relative}"] = (content + "\n" if content else "").encode("utf-8")
     if not descriptions:
         raise SystemExit("No declared profile selected")
+    if instance.get("professional_context"):
+        plan["shared/professional/owner-context.md"] = (source_text(private, instance["professional_context"]) + "\n").encode("utf-8")
     # Preflight the entire set before any profile is created or changed.
     existing_profiles = set()
     for name in descriptions:

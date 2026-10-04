@@ -76,3 +76,11 @@ Alfred consulte le contexte et les sources pour qualifier la demande, puis trans
 Le broker refuse chemins de secrets, données opérationnelles, symlinks, sources trop grosses, erreurs de syntaxe, secrets détectés et base Git obsolète. Il ne sait pas classifier le sens de toute information personnelle : le documentaliste doit contrôler les contextes public/privé et demander l’arbitrage en cas de doute. Les agents partagent encore un compte Unix : ces profils ne constituent pas une isolation de sécurité.
 
 Une erreur de push conserve le commit. retry ne publie que si la branche distante est ancêtre du commit local ; une divergence ne déclenche jamais de force-push. Les deux dépôts se publient successivement, et le verrou privé doit pointer le commit public confirmé. Les journaux de publication restent privés, hors Git.
+
+
+La commande utilisateur `alfred-publish` appelle par `sudo` le point d’entrée administratif distinct `/usr/local/sbin/alfred-publish-broker`. Les chemins `/usr/local/bin/alfred-publish` et `/usr/local/sbin/alfred-publish` sont des clients identiques : l’ordre de `PATH`, y compris le `secure_path` de sudo, ne doit jamais lancer directement le script Python réservé à root. Les quatre actions autorisées restent `status`, `sync`, `publish` et `retry`, avec les mêmes destinations fixes et sans accès direct aux credentials.
+
+
+## Vérification des points d’entrée de publication
+
+Le client est vérifié sous le compte de service pour les deux scopes, avec bin puis sbin en tête de PATH. Les contrats de périmètre, taille et refus de symlinks passent. Ces contrôles ne remplacent pas la confirmation distante de chaque publication ni une validation de tous les workflows.
