@@ -54,4 +54,4 @@ Après composition des profils, suivre le [déploiement des modules retenus](dep
 
 ## Raccorder Hermes Desktop
 
-Après composition des profils et supervision, le [guide des accès](communiquer-avec-alfred.md) fournit le backend headless supervisé, le transport SSH et les procédures Desktop, messageries et IDE. La cible recommandée est Remote gateway en HTTPS authentifié ; le tunnel SSH manuel décrit dans le guide constitue l’accès provisoire déjà vérifié. La publication HTTPS et le raccordement SSH natif restent à éprouver.
+Après composition des profils et supervision, le [guide des accès](communiquer-avec-alfred.md) décrit la connexion Desktop, les messageries et les accès IDE. La cible recommandée est Remote gateway en HTTPS authentifié ; le transport SSH manuel constitue l’accès provisoire déjà vérifié. La procédure utilisateur documente les champs Remote gateway en HTTPS. La publication HTTPS et le raccordement SSH natif restent à éprouver.
