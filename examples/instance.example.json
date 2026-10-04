@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "instance_id": "demo",
+  "owner": "Utilisateur Démo",
+  "locale": "fr-FR",
+  "timezone": "UTC",
+  "relationship_soul": "profiles/alfred/SOUL.md",
+  "platform_revision": "REPLACE_WITH_RELEASE_COMMIT",
+  "model_policy": {"provider": "openrouter", "router": "openrouter/auto", "cost_tier": "low", "credential_ref": "OPENROUTER_API_KEY"},
+  "channels": [],
+  "operational_data_in_git": false
+}
