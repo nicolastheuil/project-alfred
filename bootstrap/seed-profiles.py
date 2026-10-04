@@ -32,6 +32,7 @@ def main():
     parser.add_argument("--instance-source", type=Path, required=True)
     parser.add_argument("--public-source", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--only", help="Compose one declared profile, preserving the others")
     args = parser.parse_args()
     if os.geteuid() != 0:
         raise SystemExit("Run as root; profile files are assigned to the service account")
@@ -51,6 +52,8 @@ def main():
     plan, descriptions = {}, {}
     for profile in team["profiles"]:
         name = profile["id"]
+        if args.only and name != args.only:
+            continue
         if not re.fullmatch(r"[a-z][a-z0-9-]{0,39}", name) or name in descriptions:
             raise SystemExit("Invalid or duplicate profile id")
         descriptions[name] = profile["description"]
@@ -71,10 +74,15 @@ def main():
             soul += "\nLa mémoire relationnelle de l'utilisateur appartient exclusivement au profil d'interface."
         config = {"memory": {"memory_enabled": True, "user_profile_enabled": name == team["entrypoint"],
                              "memory_char_limit": 2200, "user_char_limit": 1375}}
+        selected = ["terminal", "file", "memory", "skills", "clarify"] if name == team["entrypoint"] else ["terminal", "file", "memory", "skills", "kanban", "web", "todo"]
+        config["agent"] = {"disabled_toolsets": ["browser", "code_execution", "computer_use", "cronjob", "delegation"]}
+        config["platform_toolsets"] = {platform: selected for platform in ["cli", "acp", "whatsapp", "teams"]}
         contents = {"SOUL.md": soul, "memories/USER.md": user, "memories/MEMORY.md": memory,
                     "config.yaml": json.dumps(config, indent=2)}
         for relative, content in contents.items():
             plan[f"profiles/{name}/{relative}"] = (content + "\n" if content else "").encode("utf-8")
+    if not descriptions:
+        raise SystemExit("No declared profile selected")
     # Preflight the entire set before any profile is created or changed.
     existing_profiles = set()
     for name in descriptions:
@@ -143,7 +151,10 @@ def main():
         directory.mkdir(mode=0o700, exist_ok=True)
         os.chown(directory, account.pw_uid, account.pw_gid)
     cli("profile", "use", team["entrypoint"])
-    report = {"schema_version": 1, "applied_at_utc": stamp, "profiles": list(descriptions),
+    if args.only:
+        applied = {**previous["files"], **applied}
+    profile_names = sorted(set(previous.get("profiles", [])) | set(descriptions))
+    report = {"schema_version": 1, "applied_at_utc": stamp, "profiles": profile_names,
               "files": applied, "model_calls": 0, "mission_execution_tested": False,
               "filesystem_isolation_between_profiles": False}
     manifest_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

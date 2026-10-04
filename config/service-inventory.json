@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "failure_threshold": 3,
+  "restart_limit_per_hour": 2,
+  "services": [
+    {
+      "unit": "alfred-gateway.service",
+      "kind": "daemon",
+      "grace_seconds": 180,
+      "probes": [
+        {"kind": "heartbeat", "path": "/var/lib/alfred-agent/.hermes/state/gateway.heartbeat", "max_age": 120},
+        {"kind": "http_json", "url": "http://127.0.0.1:3000/health", "field": "status", "expected": "connected"},
+        {"kind": "tcp", "host": "127.0.0.1", "port": 8645}
+      ]
+    },
+    {"unit": "zramswap.service", "kind": "oneshot", "grace_seconds": 60, "probes": [{"kind": "zram"}]},
+    {"unit": "alfred-monitor.timer", "kind": "timer", "grace_seconds": 240, "probes": [{"kind": "heartbeat", "path": "/var/lib/alfred/monitor/health.json", "max_age": 180}]},
+    {"unit": "alfred-recovery.service", "kind": "job", "auto_restart": false, "probes": []}
+  ]
+}

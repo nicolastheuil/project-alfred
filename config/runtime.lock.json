@@ -24,7 +24,8 @@
   },
   "extras": [
     "acp",
-    "mcp"
+    "mcp",
+    "teams"
   ],
   "service_account": "alfred",
   "data_home": "/var/lib/alfred-agent/.hermes",

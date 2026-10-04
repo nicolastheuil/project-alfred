@@ -85,7 +85,7 @@ export UV_CACHE_DIR=/var/cache/alfred/uv
 export UV_PROJECT_ENVIRONMENT="$release/venv"
 export UV_PYTHON_DOWNLOADS=never
 export UV_CONCURRENT_DOWNLOADS=4 UV_CONCURRENT_BUILDS=1 UV_CONCURRENT_INSTALLS=2
-echo '[alfred] Installing locked core dependencies, ACP and MCP'
+echo '[alfred] Installing locked core dependencies, ACP, MCP and Teams'
 cd "$release"
 # Only verified wheels for third-party runtime dependencies. Prepare the local
 # package build separately so its build tools also have pinned versions/hashes.
@@ -98,12 +98,12 @@ assert metadata.version('setuptools') == '83.0.0'
 assert metadata.version('wheel') == '0.48.0'
 PY
 then
-  /opt/alfred/tools/uv sync --locked --no-dev --extra acp --extra mcp --python "$python_executable" \
+  /opt/alfred/tools/uv sync --locked --no-dev --extra acp --extra mcp --extra teams --python "$python_executable" \
     --no-install-project --no-build
   /opt/alfred/tools/uv pip install --python "$release/venv/bin/python" --require-hashes --no-deps \
     -r "$platform_root/deploy/runtime/build-requirements.lock"
 fi
-/opt/alfred/tools/uv sync --locked --no-dev --extra acp --extra mcp --python "$python_executable" \
+/opt/alfred/tools/uv sync --locked --no-dev --extra acp --extra mcp --extra teams --python "$python_executable" \
   --no-build-isolation --inexact
 # Engine and dependency installation belong to the system, not to model tool calls.
 chmod -R go-w "$release"
@@ -142,9 +142,6 @@ manifest = {
         'license_classifiers': [c for c in (d.metadata.get_all('Classifier') or []) if c.startswith('License ::')],
         'project_urls': d.metadata.get_all('Project-URL') or [],
     } for d in importlib.metadata.distributions()], key=lambda d: d['name'].lower()),
-    'profiles_composed': False,
-    'model_request_tested': False,
-    'channels_configured': False,
 }
 Path('/var/lib/alfred/runtime-manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')
 print('[alfred] Engine installed; manifest: /var/lib/alfred/runtime-manifest.json')

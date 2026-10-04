@@ -1,0 +1,12 @@
+[Unit]
+Description=Check Alfred health every minute without model calls
+
+[Timer]
+OnBootSec=180s
+OnUnitActiveSec=60s
+AccuracySec=5s
+Persistent=yes
+Unit=alfred-monitor.service
+
+[Install]
+WantedBy=timers.target

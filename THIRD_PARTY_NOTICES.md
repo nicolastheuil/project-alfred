@@ -1,10 +1,10 @@
 # Les projets sur lesquels Alfred s'appuie
 
-Project Alfred compose et configure des composants existants. Le mérite de leur moteur, de leurs protocoles et de leurs outils revient à leurs auteurs. La licence MIT de ce dépôt concerne nos fichiers originaux ; chaque dépendance conserve sa propre licence. Nous ne recopions pas ici le code ou les binaires de ces projets.
+Project Alfred compose et configure des composants existants. Le mérite de leur moteur, de leurs protocoles et de leurs outils revient à leurs auteurs. La licence MIT de ce dépôt concerne nos fichiers originaux ; chaque dépendance conserve sa propre licence. Les adaptations de skills ECC conservent leur notice MIT ; les dépendances binaires sont installées depuis leurs sources officielles et ne sont pas redistribuées dans Git.
 
 | Composant et source | Licence | Utilité et raison du choix | État |
 |---|---|---|---|
-| [Hermes Agent 0.21.5 — Nous Research](https://github.com/NousResearch/hermes-agent), [licence](https://github.com/NousResearch/hermes-agent/blob/v2026.9.24/LICENSE) | MIT | Moteur d'agents, profils persistants, mémoire, skills et Kanban. Réutiliser ces fonctions évite un deuxième framework d'orchestration. | Moteur installé et version verrouillée ; équipe et canaux à composer. |
+| [Hermes Agent 0.21.5 — Nous Research](https://github.com/NousResearch/hermes-agent), [licence](https://github.com/NousResearch/hermes-agent/blob/v2026.9.24/LICENSE) | MIT | Moteur d'agents, profils persistants, mémoire, skills et Kanban. Réutiliser ces fonctions évite un deuxième framework d'orchestration. | Moteur verrouillé, profils composés et gateway supervisée ; circuit complet de missions et livraison sur les canaux encore à éprouver. |
 | [uv 0.12.23 — Astral](https://github.com/astral-sh/uv), [MIT](https://github.com/astral-sh/uv/blob/main/LICENSE-MIT) / [Apache](https://github.com/astral-sh/uv/blob/main/LICENSE-APACHE) | MIT ou Apache-2.0 | Installation des dépendances depuis le verrou et vérification de leurs empreintes. Version et archive ARM64 fixées pour éviter une résolution flottante. | Utilisé par le bootstrap. |
 | [Python Build Standalone — Astral](https://github.com/astral-sh/python-build-standalone), [licence du système de construction](https://github.com/astral-sh/python-build-standalone/blob/main/LICENSE) | MPL-2.0 pour le projet de construction ; licences propres aux composants du binaire | Fournit un CPython 3.11.17 dédié avec SQLite 3.53.1. Corrige le problème WAL signalé par le diagnostic sans modifier Python ou SQLite sur Debian. Archive du build `20261003` verrouillée et vérifiée. | Utilisé par le runtime. |
 | [zram-tools 0.3.3.1-1.1 — Jonathan Carter](https://salsa.debian.org/jcc/zram-tools), [paquet Debian](https://packages.debian.org/bookworm/zram-tools) | ISC | Configure et active le swap compressé au démarrage. Première réponse à la contrainte de RAM, à mesurer en charge ; ne crée pas de RAM physique supplémentaire. | Installé, actif et réexécution vérifiée. |
@@ -14,6 +14,15 @@ Project Alfred compose et configure des composants existants. Le mérite de leur
 | [GitHub Actions checkout](https://github.com/actions/checkout) et [setup-python](https://github.com/actions/setup-python) | MIT, voir leurs dépôts | Exécution des contrôles à chaque push. Les actions sont référencées par commit, afin de garder une chaîne d'exécution identifiable. | CI active. |
 
 ## Briques système et dépendances indirectes
+
+| Composant | Licence | Fonction et choix | État |
+| --- | --- | --- | --- |
+| [Node.js](https://github.com/nodejs/node), [licence](https://github.com/nodejs/node/blob/main/LICENSE) | MIT et notices des dépendances embarquées | Exécute le bridge WhatsApp fourni avec Hermes. Version ARM64 et SHA256 dans `config/channel-dependencies.lock.json`, hors du système de paquets Debian. | Installé pour le canal optionnel WhatsApp. |
+| [Baileys — WhiskeySockets](https://github.com/WhiskeySockets/Baileys), [licence](https://github.com/WhiskeySockets/Baileys/blob/master/LICENSE) | MIT | Bibliothèque du bridge WhatsApp Hermes. Les versions indirectes sont verrouillées par le `package-lock.json` du moteur retenu. Ce canal repose sur une session WhatsApp Web ; il ne constitue pas une API officielle Meta. | Bridge connecté sur l'instance d'acceptation ; livraison utilisateur à vérifier. |
+| [Microsoft Teams SDK Python](https://github.com/microsoft/teams.py) | MIT, voir la licence du dépôt | Réception des activités authentifiées du bot Teams. Les paquets `microsoft-teams-*` sont verrouillés dans `uv.lock` Hermes, extra `teams`. | Adaptateur démarré ; callback public et échange utilisateur à vérifier. |
+| [1Password CLI](https://developer.1password.com/docs/cli/) | Logiciel propriétaire, conditions 1Password | Accès au coffre par le composant privilégié, sans copie de ses secrets dans Git. Paquet ARM64 et clé de signature du dépôt officiel déclarés dans le verrou des canaux. | CLI installée ; accès au coffre vérifié sur l'instance. |
+
+Le bridge et ses fichiers auxiliaires proviennent du commit Hermes verrouillé. Leur copie de déploiement reste soumise à la licence Hermes et les modules npm à leurs licences propres. Le bootstrap utilise `npm ci` sans scripts d'installation implicites.
 
 La VM utilise Debian, Linux, systemd, OpenSSH, Git, Python, curl, jq et ripgrep. Ces composants proviennent des dépôts système, avec leurs notices de copyright sous `/usr/share/doc/<paquet>/copyright`. Le bootstrap relève les versions installées dans le manifeste système. Il ne redistribue pas ces composants sous la licence du projet. [ripgrep](https://github.com/BurntSushi/ripgrep) accélère la recherche de fichiers et de contenu pour les outils Hermes, avec un binaire système lancé à la demande.
 
@@ -25,6 +34,17 @@ Les paquets Python indirects restent décrits dans le `uv.lock` d'Hermes au comm
 
 ## Comment cet inventaire évolue
 
-ECC (affaan-m et contributeurs, MIT), Context7 (Upstash et contributeurs, MIT), Headroom (Headroom Labs et contributeurs, Apache-2.0) et RTK (rtk-ai et contributeurs, Apache-2.0) sont crédités dans l'[étude détaillée des modules](docs/choix-modules.md), avec leurs dépôts source et révisions examinées. Leurs fonctions et choix sont documentés ; ils ne sont pas encore des dépendances installées de la v1.
+Les modules adoptés sont verrouillés dans [modules.lock.json](config/modules.lock.json), documentés dans l'[étude](docs/etude-outils-v1.md) et installés par les [procédures des modules](docs/deploiement-modules.md).
+
+| Composant | Licence et source | Fonction et raison du choix | État vérifié |
+|---|---|---|---|
+| ECC, affaan-m et contributeurs, commit `ef648e01899ba3e8dc6371642deaaf64b4477775` | [MIT](https://github.com/affaan-m/ECC/blob/ef648e01899ba3e8dc6371642deaaf64b4477775/LICENSE) | Trois méthodes adaptées aux experts, avec preuves et permissions effectives ; pas de second harness. | Skills installés ; licences conservées dans chaque adaptation sous skills/. |
+| Context7, Upstash et contributeurs | [MIT du dépôt](https://github.com/upstash/context7/blob/bfa02ea67b5707fe0e0a673faa49d0f50b28c80b/LICENSE) ; conditions propres au service distant | Documentation logicielle à la demande sans serveur Node local ; deux outils autorisés sur trois rôles. | MCP distant utilisé depuis Hermes ; résolution et référence versionnée vérifiées. Révision d'étude distincte du backend distant. |
+| LintLang 0.8.2, Hermes Labs AI | [Apache-2.0](https://github.com/hermes-labs-ai/lintlang/blob/60dd8ae439dd5482197bc941a07f51607b658017/LICENSE) | Contrôle structurel local des instructions, complémentaire des tests et de la revue. | Venv isolé, wheels à empreintes vérifiées, commande et contrôle CI. |
+| PyYAML 6.0.3 | [MIT](https://github.com/yaml/pyyaml/blob/main/LICENSE) | Lecture des formats de configuration par LintLang ; dépendance isolée et verrouillée. | Installé avec empreintes des wheels dans lintlang-requirements.lock. |
+| RTK 0.51.0, Patrick Szymkowiak et contributeurs, commit `e001f773f80b22b7dc4c7a79521b30e35aaef026` | [Apache-2.0](https://github.com/rtk-ai/rtk/blob/e001f773f80b22b7dc4c7a79521b30e35aaef026/LICENSE) | Résumés Git explicites avec capture locale des preuves ; pas de hooks automatiques. | Binaire natif Debian 12 installé ; réduction des sorties, codes d’échec et captures brutes vérifiés. Licence installée avec le binaire. |
+| Rust 1.91.0 et Cargo, équipe Rust | [MIT ou Apache-2.0](https://github.com/rust-lang/rust) ; notices propres aux composants distribués | Compilation ARM64 compatible Debian 12 ; le binaire RTK publié exige une glibc plus récente. | Archive officielle à SHA256 vérifié ; outil de construction ponctuel, pas un service agent. |
+
+Headroom, Tool Slimmer, Local Knowledge et Sibyl sont crédités comme sources étudiées dans [l'étude](docs/etude-outils-v1.md) et le verrou, avec leurs révisions et licences. Ils ne sont pas des composants déployés.
 
 Tout composant ajouté doit avoir une origine, une version identifiable, une explication de sa fonction et une raison du choix. Son état passe à « installé » ou « validé » seulement après vérification réelle. Les outils simplement envisagés restent dans l'[étude de l'écosystème](docs/ecosysteme.md), avec leurs sources et les critères à vérifier avant adoption.

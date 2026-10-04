@@ -1,0 +1,23 @@
+[Unit]
+Description=Independent bounded Platform Engineer incident recovery
+After=network-online.target
+StartLimitIntervalSec=3600
+StartLimitBurst=2
+
+[Service]
+Type=oneshot
+User=alfred
+Group=alfred
+Slice=alfred-runtime.slice
+WorkingDirectory=/var/lib/alfred-agent
+Environment=HOME=/var/lib/alfred-agent
+Environment=PATH=/opt/alfred/tools/node/bin:/usr/local/bin:/usr/bin:/bin
+Environment=HERMES_HOME=/var/lib/alfred-agent/.hermes
+ExecStart=/usr/local/bin/hermes -p platform-engineer chat -Q --oneshot --run-budget 240 --max-turns 18 -q "Incident de plateforme : lis /var/lib/alfred-agent/.hermes/shared/missions/platform-incidents/pending.json et les dossiers associes. Verifie /usr/local/bin/alfred-service-status. Si la gateway est inactive, demande /usr/local/bin/alfred-repair restart alfred-gateway.service puis verifie son retour. Ne lance pas la gateway en foreground et ne demande pas sudo directement. Diagnostique sans exposer de secrets. Utilise uniquement les droits effectifs ; /usr/local/bin/alfred-repair permet une relance bornee des services declares. Conserve les preuves dans ces dossiers. Mets a jour chaque carte Kanban indiquee via la CLI : complete si la sante est retablie, bloque pour intervention humaine sinon. Ne publie rien et ne contacte personne."
+TimeoutStartSec=300s
+TimeoutStopSec=30s
+KillMode=control-group
+UMask=0077
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes

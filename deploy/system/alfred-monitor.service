@@ -1,0 +1,16 @@
+[Unit]
+Description=Alfred deterministic service and channel health checks
+After=network-online.target
+StartLimitIntervalSec=900
+StartLimitBurst=5
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -I /usr/local/lib/alfred/service-monitor.py
+TimeoutStartSec=90s
+Restart=on-failure
+RestartSec=30s
+UMask=0077
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes

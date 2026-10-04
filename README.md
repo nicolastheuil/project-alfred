@@ -4,7 +4,7 @@
 
 Alfred est le point d'entrée d'une équipe d'agents spécialisés. Il comprend la demande ; un coordinateur organise le travail ; des experts produisent et vérifient les résultats. Chaque utilisateur personnalise son instance sans modifier le socle commun.
 
-> **État : construction de la v1.** Le socle système Debian et l'installation d'Hermes verrouillé ont été exécutés sur VM ARM64. Ce dépôt contient aussi le contrat d'architecture, les modèles de rôles, les crédits, la documentation et les contrôles. L'équipe configurée et les connecteurs restent en construction. Ce n'est pas encore une distribution prête à travailler.
+> **État : construction de la v1.** Le socle système Debian et l'installation d'Hermes verrouillé ont été exécutés sur VM ARM64. Ce dépôt contient aussi le contrat d'architecture, les modèles de rôles, les crédits, la documentation et les contrôles. Les profils sont composés, les modules retenus sont installés et la gateway est supervisée ; le circuit complet de missions et les livraisons sur les canaux restent à éprouver. Ce n'est pas encore une distribution prête à travailler.
 
 ## Découvrir le fonctionnement
 
@@ -14,8 +14,10 @@ Alfred est le point d'entrée d'une équipe d'agents spécialisés. Il comprend 
 - [Construction de la v1 et critères de validation](docs/construction.md)
 - [Installer le socle système et le moteur sur Debian 12 ARM64](docs/installation.md)
 - [Choix des outils et étude de l’écosystème](docs/ecosysteme.md)
-- [ECC, Context7, Headroom, RTK et zram : décisions et état d'installation](docs/choix-modules.md)
+- [Étude des huit outils, décisions et mesures](docs/etude-outils-v1.md)
+- [Installer les modules retenus](docs/deploiement-modules.md)
 - [Composer les identités et répartir les mémoires](docs/identites-memoires.md)
+- [Supervision, relances et réparation par Platform Engineer](docs/supervision.md)
 - [Crédits, licences et rôle des composants utilisés](THIRD_PARTY_NOTICES.md)
 - [Contrat de la plateforme](config/platform-contract.json)
 

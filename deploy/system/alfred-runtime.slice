@@ -1,0 +1,11 @@
+[Unit]
+Description=Aggregate resource budget for Alfred runtime and repairs
+
+[Slice]
+MemoryAccounting=yes
+MemoryHigh=1200M
+MemoryMax=1500M
+MemorySwapMax=1024M
+CPUAccounting=yes
+CPUQuota=180%
+TasksMax=256

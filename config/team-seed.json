@@ -43,6 +43,13 @@
       "description": "Documentation du socle, des choix et de l'état réellement vérifié.",
       "domain": "Documentation technique et fonctionnelle de la plateforme.",
       "memory": "Les modules étudiés et leurs états sont dans docs/choix-modules.md du socle. Les manifestes d'installation constituent des preuves ; ils ne valident pas l'orchestration ni les canaux. Les données opérationnelles ne sont pas des changements de configuration à publier."
+    },
+    {
+      "id": "platform-engineer",
+      "soul": "profiles/platform-engineer/SOUL.md",
+      "description": "AI Platform Engineer : Hermes, Linux, services, ressources et diagnostic de la plateforme.",
+      "domain": "Fiabilite de la plateforme IA et administration Linux dans les permissions effectives.",
+      "memory": "Le cycle de vie des services permanents appartient a systemd. Les MCP paresseux appartiennent au moteur. Un incident doit conserver les preuves, les relances deja tentees et les limites du diagnostic ; aucune autorisation ancienne n’est reconduite."
     }
   ]
 }

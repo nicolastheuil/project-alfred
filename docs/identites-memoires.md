@@ -4,7 +4,7 @@ Une identité persistante est un dossier de profil Hermes, avec sa SOUL et ses f
 
 ## Un flux commun, des domaines configurables
 
-Alfred comprend et restitue ; **orchestrator** coordonne ; les experts réalisent ; les revues vérifient. Le socle générique propose six profils : alfred, orchestrator, expert, qa, rssi et documentaliste. `config/team-seed.json` décrit cette base. La spécialité et le contexte d'un expert peuvent être professionnels ou personnels ; le flux de mission reste le même.
+Alfred comprend et restitue ; **orchestrator** coordonne ; les experts réalisent ; les revues vérifient. Le socle générique propose sept profils : alfred, orchestrator, expert, qa, rssi et documentaliste. `config/team-seed.json` décrit cette base. La spécialité et le contexte d'un expert peuvent être professionnels ou personnels ; le flux de mission reste le même.
 
 L'instance peut fournir son propre `team_seed` et ses `profile_memory_seeds`. Son fichier d'équipe utilise le même format que le socle : identifiant, description, SOUL générique du socle, domaine et mémoire initiale. On peut ainsi avoir plusieurs expertises persistantes et en ajouter sans déplacer leur savoir métier dans Alfred. Une déclaration de profil ne crée pas les outils ou permissions de ce domaine.
 

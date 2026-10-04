@@ -6,7 +6,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 ALLOWED_ROOT_FILES = {"README.md", "AGENTS.md", "LICENSE", "THIRD_PARTY_NOTICES.md", ".gitignore", ".gitattributes"}
-ALLOWED_DIRECTORIES = {"docs", "config", "examples", "profiles", "tools", "bootstrap", "deploy", ".github"}
+ALLOWED_DIRECTORIES = {"docs", "config", "examples", "profiles", "skills", "tools", "bootstrap", "deploy", ".github"}
 FORBIDDEN_NAMES = {"auth.json", "credentials.json", "USER.md", "MEMORY.md"}
 FORBIDDEN_SUFFIXES = {".key", ".pem", ".p12", ".pfx", ".ppk", ".db", ".sqlite", ".aes", ".age"}
 
@@ -35,6 +35,11 @@ def check():
             continue
         if path.stat().st_size > 1_000_000:
             errors.append(f"Unexpected large source file: {relative}")
+        if path.suffix == '.py':
+            try:
+                compile(path.read_text(encoding='utf-8'), str(relative), 'exec')
+            except (SyntaxError, UnicodeError) as error:
+                errors.append(f'Invalid Python source {relative}: {error}')
         if path.suffix == ".json":
             try:
                 json.loads(path.read_text(encoding="utf-8"))
@@ -70,7 +75,7 @@ def check():
     if (runtime["uv"]["architecture"] != "arm64" or runtime["python"]["major_minor"] != "3.11"
             or runtime["python"]["executable"] != f"/opt/alfred/tools/cpython-{runtime['python']['version']}-{runtime['python']['build']}/bin/python3"
             or runtime["service_account"] != "alfred" or runtime["data_home"] != "/var/lib/alfred-agent/.hermes"
-            or runtime["extras"] != ["acp", "mcp"] or runtime["build_requirements"] != "deploy/runtime/build-requirements.lock"):
+            or runtime["extras"] != ["acp", "mcp", "teams"] or runtime["build_requirements"] != "deploy/runtime/build-requirements.lock"):
         errors.append("Runtime lock does not match the initial Debian ARM64 installer contract")
     for relative in ["docs/guide-illustre.md", "docs/personnalisation.md", "docs/construction.md", "examples/instance.example.json", "THIRD_PARTY_NOTICES.md", "config/runtime.lock.json"]:
         if not (ROOT / relative).is_file():

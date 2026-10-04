@@ -1,0 +1,33 @@
+[Unit]
+Description=Alfred Hermes gateway and native Kanban dispatcher
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=900
+StartLimitBurst=5
+
+[Service]
+Type=notify
+NotifyAccess=main
+WatchdogSec=120s
+User=alfred
+Group=alfred
+Slice=alfred-runtime.slice
+WorkingDirectory=/var/lib/alfred-agent
+Environment=HOME=/var/lib/alfred-agent
+Environment=PATH=/opt/alfred/tools/node/bin:/usr/local/bin:/usr/bin:/bin
+Environment=HERMES_HOME=/var/lib/alfred-agent/.hermes
+ExecStart=/usr/local/bin/hermes -p default gateway run
+Restart=always
+RestartSec=15s
+TimeoutStartSec=180s
+TimeoutStopSec=90s
+TimeoutAbortSec=15s
+LimitCORE=0
+KillMode=control-group
+UMask=0077
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+
+[Install]
+WantedBy=multi-user.target

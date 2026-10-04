@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "studied_at": "2026-10-04",
+  "ecc": {
+    "repository": "https://github.com/affaan-m/ECC",
+    "revision": "ef648e01899ba3e8dc6371642deaaf64b4477775",
+    "license": "MIT",
+    "skills": [
+      "ecc-verification",
+      "ecc-security-review",
+      "ecc-iterative-retrieval"
+    ]
+  },
+  "context7": {
+    "repository": "https://github.com/upstash/context7",
+    "study_revision": "bfa02ea67b5707fe0e0a673faa49d0f50b28c80b",
+    "license": "MIT",
+    "endpoint": "https://mcp.context7.com/mcp",
+    "profiles": [
+      "dev",
+      "devops",
+      "platform-engineer"
+    ],
+    "tools": [
+      "resolve-library-id",
+      "query-docs"
+    ]
+  },
+  "lintlang": {
+    "repository": "https://github.com/hermes-labs-ai/lintlang",
+    "version": "0.8.2",
+    "license": "Apache-2.0",
+    "requirements": "deploy/runtime/lintlang-requirements.lock"
+  },
+  "rtk": {
+    "repository": "https://github.com/rtk-ai/rtk",
+    "version": "0.51.0",
+    "license": "Apache-2.0",
+    "revision": "e001f773f80b22b7dc4c7a79521b30e35aaef026",
+    "url": "https://codeload.github.com/rtk-ai/rtk/tar.gz/e001f773f80b22b7dc4c7a79521b30e35aaef026",
+    "sha256": "cb8dfde05bfe102c06400d121faa6399a5d590a3f3ba95eae8c53b7e5dab1873",
+    "rust_url": "https://static.rust-lang.org/dist/rust-1.91.0-aarch64-unknown-linux-gnu.tar.xz",
+    "rust_sha256": "62b2b7aeba3a629783263742fc50e7a097349f8dd2d7cdf394ab2723a6b3c7ee",
+    "build_environment": {
+      "architecture": "aarch64",
+      "distribution": "Debian 12",
+      "rust_version": "1.91.0",
+      "jobs": 1,
+      "lto": false,
+      "codegen_units": 16,
+      "opt_level": 2
+    }
+  },
+  "excluded_toolsets": [
+    "browser",
+    "code_execution",
+    "computer_use",
+    "cronjob",
+    "delegation"
+  ],
+  "native_tool_search_defer": [
+    "todo_list",
+    "process_manage",
+    "kanban_attach",
+    "kanban_attach_url",
+    "kanban_attachments",
+    "kanban_block",
+    "kanban_comment",
+    "kanban_complete",
+    "kanban_create",
+    "kanban_heartbeat",
+    "kanban_link",
+    "kanban_list",
+    "kanban_request_changes",
+    "kanban_request_review",
+    "kanban_show",
+    "kanban_unblock"
+  ],
+  "not_deployed": {
+    "tool-slimmer": {
+      "repository": "https://github.com/aliasocracy/hermes-tool-slimmer",
+      "study_revision": "1b90aa592f7423233ea6cdfd44c7188e14ca7ccf",
+      "license": "MIT"
+    },
+    "local-knowledge": {
+      "repository": "https://github.com/stepanov1975/hermes-local-knowledge",
+      "study_revision": "0e1034341d3901ba8f11c7c7690649711d40607a",
+      "license": "MIT"
+    },
+    "sibyl-memory": {
+      "repository": "https://github.com/Sibyl-Labs/Sibyl-Memory",
+      "study_revision": "761bfc64799f637dd1ff70fbd07bdb997c2fd806",
+      "license": "MIT"
+    },
+    "headroom": {
+      "repository": "https://github.com/headroomlabs-ai/headroom",
+      "study_revision": "1cf496612e781ef8d67ff87ee4f78037492f0bc7",
+      "license": "Apache-2.0"
+    }
+  }
+}

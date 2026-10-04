@@ -22,6 +22,17 @@ jobs:
           bash -n bootstrap/prepare-host.sh
           bash -n bootstrap/install-hermes.sh
           bash -n deploy/runtime/hermes-launcher.sh
+          bash -n bootstrap/install-channel-tools.sh
+          bash -n bootstrap/install-supervision.sh
+          bash -n deploy/runtime/service-control.sh
+          bash -n deploy/runtime/repair-client.sh
+          bash -n deploy/runtime/service-status.sh
+      - name: Check supervision failure paths
+        run: python tools/test_service_monitor.py
+      - name: Install pinned instruction linter
+        run: python -m pip install --require-hashes --only-binary=:all: -r deploy/runtime/lintlang-requirements.lock
+      - name: Review maintained instructions
+        run: python tools/check_instructions.py
       - name: Check history for credentials
         shell: bash
         run: |
