@@ -2,11 +2,11 @@
 
 ## Ce qui existe dans ce dépôt
 
-Le contrat de plateforme, les modèles de SOUL, les schémas de personnalisation documentés, le guide illustré, la préparation système Debian et les contrôles de cohérence et de publication. Le contrôle CI vérifie ces artefacts et la syntaxe du bootstrap ; il ne certifie pas encore une installation de production.
+Le contrat de plateforme, les modèles de SOUL, les schémas de personnalisation documentés, le guide illustré, la préparation système Debian, l'installation du moteur Hermes verrouillé, les crédits des composants et les contrôles de cohérence et de publication. Le contrôle CI vérifie ces artefacts et la syntaxe du bootstrap ; il ne certifie pas encore une installation de production.
 
 ## Ce qui reste à construire et éprouver
 
-- Bootstrap reproductible sur une VM Debian vierge, versions du moteur et dépendances verrouillées.
+- Bootstrap complet d'une instance sur VM vierge : prérequis et moteur ont été exécutés ; composition des profils, accès et état restent à éprouver.
 - Composition du socle et de l'instance, migration et retour à une version précédente.
 - Profils persistants, orchestration Kanban et limite globale réellement appliquée.
 - Isolation des workers, courtage des secrets et contrôle des opérations externes.

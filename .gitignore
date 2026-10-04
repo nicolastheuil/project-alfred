@@ -16,7 +16,7 @@ credentials.json
 __pycache__/
 *.pyc
 .venv/
-runtime/
+/runtime/
 state/
 private/
 backups/

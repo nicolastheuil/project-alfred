@@ -4,7 +4,7 @@
 
 Alfred est le point d'entrée d'une équipe d'agents spécialisés. Il comprend la demande ; un coordinateur organise le travail ; des experts produisent et vérifient les résultats. Chaque utilisateur personnalise son instance sans modifier le socle commun.
 
-> **État : initialisation de la v1.** Ce dépôt contient le contrat d'architecture, les modèles de rôles, la documentation et les premiers contrôles. Le déploiement complet et les connecteurs sont en construction. Ce n'est pas encore une distribution prête à travailler.
+> **État : construction de la v1.** Le socle système Debian et l'installation d'Hermes verrouillé ont été exécutés sur VM ARM64. Ce dépôt contient aussi le contrat d'architecture, les modèles de rôles, les crédits, la documentation et les contrôles. L'équipe configurée et les connecteurs restent en construction. Ce n'est pas encore une distribution prête à travailler.
 
 ## Découvrir le fonctionnement
 
@@ -12,8 +12,9 @@ Alfred est le point d'entrée d'une équipe d'agents spécialisés. Il comprend 
 - [Socle public, instance privée : personnaliser sans tout recopier](docs/personnalisation.md)
 - [Qui publie vers quels dépôts ?](docs/publication.md)
 - [Construction de la v1 et critères de validation](docs/construction.md)
-- [Préparer les prérequis d'une VM Debian 12](docs/installation.md)
+- [Installer le socle système et le moteur sur Debian 12 ARM64](docs/installation.md)
 - [Choix des outils et étude de l’écosystème](docs/ecosysteme.md)
+- [Crédits, licences et rôle des composants utilisés](THIRD_PARTY_NOTICES.md)
 - [Contrat de la plateforme](config/platform-contract.json)
 
 ```mermaid

@@ -1,10 +1,11 @@
 """Check the initial public repository contract using only the standard library."""
 import json
 from pathlib import Path
+import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-ALLOWED_ROOT_FILES = {"README.md", "AGENTS.md", "LICENSE", ".gitignore", ".gitattributes"}
+ALLOWED_ROOT_FILES = {"README.md", "AGENTS.md", "LICENSE", "THIRD_PARTY_NOTICES.md", ".gitignore", ".gitattributes"}
 ALLOWED_DIRECTORIES = {"docs", "config", "examples", "profiles", "tools", "bootstrap", "deploy", ".github"}
 FORBIDDEN_NAMES = {"auth.json", "credentials.json", "USER.md", "MEMORY.md"}
 FORBIDDEN_SUFFIXES = {".key", ".pem", ".p12", ".pfx", ".ppk", ".db", ".sqlite", ".aes", ".age"}
@@ -49,7 +50,18 @@ def check():
     limits = contract["initial_limits"]
     if not 0 < limits["tasks_per_profile"] <= limits["global_tasks"]:
         errors.append("Invalid task limits")
-    for relative in ["docs/guide-illustre.md", "docs/personnalisation.md", "docs/construction.md", "examples/instance.example.json"]:
+    runtime = json.loads((ROOT / "config/runtime.lock.json").read_text(encoding="utf-8"))
+    if not re.fullmatch(r"[0-9a-f]{40}", runtime["hermes"]["revision"]):
+        errors.append("Hermes must be pinned to a full commit SHA")
+    for digest in [runtime["hermes"]["uv_lock_sha256"], runtime["uv"]["sha256"], runtime["python"]["sha256"]]:
+        if not re.fullmatch(r"[0-9a-f]{64}", digest):
+            errors.append("Runtime artifact requires a SHA256 hash")
+    if (runtime["uv"]["architecture"] != "arm64" or runtime["python"]["major_minor"] != "3.11"
+            or runtime["python"]["executable"] != f"/opt/alfred/tools/cpython-{runtime['python']['version']}-{runtime['python']['build']}/bin/python3"
+            or runtime["service_account"] != "alfred" or runtime["data_home"] != "/var/lib/alfred-agent/.hermes"
+            or runtime["extras"] != ["acp", "mcp"] or runtime["build_requirements"] != "deploy/runtime/build-requirements.lock"):
+        errors.append("Runtime lock does not match the initial Debian ARM64 installer contract")
+    for relative in ["docs/guide-illustre.md", "docs/personnalisation.md", "docs/construction.md", "examples/instance.example.json", "THIRD_PARTY_NOTICES.md", "config/runtime.lock.json"]:
         if not (ROOT / relative).is_file():
             errors.append(f"Missing documentation or example: {relative}")
     if errors:

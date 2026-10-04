@@ -17,7 +17,7 @@ install -d -m 0700 "$manifest_root" "$manifest_root/host-originals"
 export DEBIAN_FRONTEND=noninteractive
 echo '[alfred] Installing Debian host prerequisites'
 apt-get -q update
-apt-get -q -y --no-install-recommends -o DPkg::Lock::Timeout=30 install ca-certificates curl git python3 python3-venv jq zram-tools
+apt-get -q -y --no-install-recommends -o DPkg::Lock::Timeout=30 install ca-certificates curl git python3 python3-venv jq ripgrep zram-tools
 
 zram_changed=false
 if ! cmp -s "$platform_root/deploy/system/zramswap.default" /etc/default/zramswap; then
@@ -50,7 +50,7 @@ import subprocess
 import sys
 
 root, destination = map(Path, sys.argv[1:])
-packages = ['ca-certificates', 'curl', 'git', 'python3', 'python3-venv', 'jq', 'zram-tools']
+packages = ['ca-certificates', 'curl', 'git', 'python3', 'python3-venv', 'jq', 'ripgrep', 'zram-tools']
 versions = subprocess.check_output(['dpkg-query', '-W', '-f=${Package}\t${Version}\t${Architecture}\n', *packages], text=True).splitlines()
 report = {
     'phase': 'host_prerequisites_ready',
