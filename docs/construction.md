@@ -2,7 +2,7 @@
 
 ## Ce qui existe dans ce dépôt
 
-Le contrat de plateforme, les modèles de SOUL, les schémas de personnalisation documentés, le guide illustré et les contrôles de cohérence et de publication. Le contrôle CI vérifie ces artefacts ; il ne certifie pas encore une installation de production.
+Le contrat de plateforme, les modèles de SOUL, les schémas de personnalisation documentés, le guide illustré, la préparation système Debian et les contrôles de cohérence et de publication. Le contrôle CI vérifie ces artefacts et la syntaxe du bootstrap ; il ne certifie pas encore une installation de production.
 
 ## Ce qui reste à construire et éprouver
 

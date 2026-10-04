@@ -17,6 +17,8 @@ jobs:
           python-version: '3.11'
       - name: Check public repository contract
         run: python tools/check_repository.py
+      - name: Check host bootstrap syntax
+        run: bash -n bootstrap/prepare-host.sh
       - name: Check history for credentials
         shell: bash
         run: |

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "mode": "instance_owner",
+  "platform": {
+    "source_repository": "https://github.com/nicolastheuil/project-alfred.git",
+    "write_repository": null,
+    "credential_ref": null
+  },
+  "instance": {
+    "write_repository": "https://github.com/EXAMPLE_OWNER/EXAMPLE_PRIVATE_INSTANCE.git",
+    "required_visibility": "private",
+    "credential_ref": "GITHUB_INSTANCE_PUBLISH"
+  },
+  "publication_service_enabled": false
+}

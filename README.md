@@ -10,7 +10,9 @@ Alfred est le point d'entrée d'une équipe d'agents spécialisés. Il comprend 
 
 - [Le bureau d'études d'Alfred : guide illustré](docs/guide-illustre.md)
 - [Socle public, instance privée : personnaliser sans tout recopier](docs/personnalisation.md)
+- [Qui publie vers quels dépôts ?](docs/publication.md)
 - [Construction de la v1 et critères de validation](docs/construction.md)
+- [Préparer les prérequis d'une VM Debian 12](docs/installation.md)
 - [Choix des outils et étude de l’écosystème](docs/ecosysteme.md)
 - [Contrat de la plateforme](config/platform-contract.json)
 
@@ -36,7 +38,7 @@ Le moteur retenu pour la cible est [Hermes Agent](https://github.com/NousResearc
 
 Commencer par [l'exemple de configuration](examples/instance.example.json) et les modèles de SOUL sous [profiles](profiles). Conserver sa personnalisation dans un espace privé. Utiliser ses propres comptes, documents, budgets et accès aux outils.
 
-Le futur installateur composera une version précise du socle avec cette personnalisation. À ce stade, aucune commande d'installation de production n'est annoncée : elle sera publiée après un test réel sur VM vierge.
+Le futur installateur complet composera une version précise du socle avec cette personnalisation. La préparation système Debian est disponible séparément ; l'installation de production sera publiée après son test réel sur VM vierge.
 
 ## Contribuer
 

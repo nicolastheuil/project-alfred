@@ -5,7 +5,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 ALLOWED_ROOT_FILES = {"README.md", "AGENTS.md", "LICENSE", ".gitignore", ".gitattributes"}
-ALLOWED_DIRECTORIES = {"docs", "config", "examples", "profiles", "tools", ".github"}
+ALLOWED_DIRECTORIES = {"docs", "config", "examples", "profiles", "tools", "bootstrap", "deploy", ".github"}
 FORBIDDEN_NAMES = {"auth.json", "credentials.json", "USER.md", "MEMORY.md"}
 FORBIDDEN_SUFFIXES = {".key", ".pem", ".p12", ".pfx", ".ppk", ".db", ".sqlite", ".aes", ".age"}
 

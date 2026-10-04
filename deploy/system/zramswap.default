@@ -1,0 +1,4 @@
+# Logical zram size equals physical RAM; memory is allocated as pages are used.
+ALGO=zstd
+PERCENT=100
+PRIORITY=100
